@@ -274,6 +274,7 @@ static const char *vgahwSymbols[] = {
     "vgaHWSetMmioFuncs",
     "vgaHWSetStdFuncs",
     "vgaHWUnmapMem",
+    "vgaHWddc1SetSpeedWeak",
    /* not used by ViRGE (at the moment :( ) */
    /*
     "vgaHWUnlock",
