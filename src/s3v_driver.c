@@ -3681,7 +3681,7 @@ S3VEnableMmio(ScrnInfoPtr pScrn)
 #if 1
   /*
    * set linear base register to the PCI register values
-   * some DX chipsets don´t seem to do it automatically
+   * some DX chipsets don't seem to do it automatically
    * (EE 06/03/99)
    */
   outb(vgaCRIndex, 0x59);         /*@@@EE*/
