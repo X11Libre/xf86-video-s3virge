@@ -56,19 +56,6 @@ in this Software without prior written authorization from the XFree86 Project.
 /* All drivers using the mi colormap manipulation need this */
 #include "micmap.h"
 
-/* Drivers using cfb need this */
-
-#define PSZ 8
-#include "cfb.h"
-#undef PSZ
-
-/* Drivers supporting bpp 16, 24 or 32 with cfb need these */
-
-#include "cfb16.h"
-#include "cfb24.h"
-#include "cfb32.h"
-#include "cfb24_32.h"
-
 /* fb support */
 
 #include "fb.h"

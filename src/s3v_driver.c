@@ -344,18 +344,6 @@ static const char *int10Symbols[] = {
 #endif
 
 #ifdef XFree86LOADER
-static const char *cfbSymbols[] = {
-    "cfbScreenInit",
-    "cfb16ScreenInit",
-    "cfb24ScreenInit",
-    "cfb24_32ScreenInit",
-    "cfb32ScreenInit",
-    "cfBresS",
-    "cfb16BresS",
-    "cfb24BresS",
-    "cfb32BresS",
-    NULL
-};
 
 static MODULESETUPPROTO(s3virgeSetup);
 
@@ -399,13 +387,12 @@ s3virgeSetup(pointer module, pointer opts, int *errmaj, int *errmin)
 	 * Tell the loader about symbols from other modules that this module
 	 * might refer to.
 	 */
-	LoaderRefSymLists(vgahwSymbols, cfbSymbols, xaaSymbols,
-			  ramdacSymbols, ddcSymbols, i2cSymbols,
+	LoaderRefSymLists(vgahwSymbols, xaaSymbols, ramdacSymbols,
+			  ddcSymbols, i2cSymbols,
 #if USE_INT10
 			  int10Symbols,
 #endif
-			  vbeSymbols, shadowSymbols, 
-			  fbSymbols, NULL);
+			  vbeSymbols, shadowSymbols, fbSymbols, NULL);
 			  
 	/*
 	 * The return value must be non-NULL on success even though there
@@ -872,17 +859,11 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
 	ps3v->hwcursor = FALSE;
     }
 
+    ps3v->UseFB = TRUE;
+    xf86DrvMsg(pScrn->scrnIndex, X_DEFAULT, "Using fb.\n");
     if (xf86IsOptionSet(ps3v->Options, OPTION_FB_DRAW)) 
-      {
-	if (xf86GetOptValBool(ps3v->Options, OPTION_FB_DRAW ,&ps3v->UseFB))
-	  xf86DrvMsg(pScrn->scrnIndex, X_CONFIG, "Using %s.\n",
-		     ps3v->UseFB ? "fb (not cfb)" : "cfb (not fb)");
-      }
-    else
-      {
-	ps3v->UseFB = TRUE;
-	xf86DrvMsg(pScrn->scrnIndex, X_DEFAULT, "Using fb.\n");
-      }
+        xf86DrvMsg(pScrn->scrnIndex, X_CONFIG,
+	           "UseFB option is deprecated.\n");
 
     if (xf86IsOptionSet(ps3v->Options, OPTION_MX_CR3A_FIX)) 
       {
@@ -1511,38 +1492,6 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
 	      return FALSE;
 	  }	       
 	xf86LoaderReqSymLists(fbSymbols, NULL);       
-      }
-    else
-      {
-	switch (pScrn->bitsPerPixel) {
-	case 8:
-	  mod = "cfb";
-	  reqSym = "cfbScreenInit";
-	  break;
-	case 16:
-	  mod = "cfb16";
-	  reqSym = "cfb16ScreenInit";
-	  break;
-	case 24:
-	  if (pix24bpp == 24) {
-	    mod = "cfb24";
-	    reqSym = "cfb24ScreenInit";
-	  } else {
-	    mod = "xf24_32bpp";
-	    reqSym = "cfb24_32ScreenInit";
-	  }
-	  break;
-	case 32:
-	  mod = "cfb32";
-	  reqSym = "cfb32ScreenInit";
-	  break;
-	}
-	if (mod && xf86LoadSubModule(pScrn, mod) == NULL) {
-	    S3VFreeRec(pScrn);
-	    return FALSE;
-	}	       
-    
-	xf86LoaderReqSymbols(reqSym, NULL);
       }
 
     /* Load XAA if needed */
@@ -2529,7 +2478,7 @@ S3VScreenInit(int scrnIndex, ScreenPtr pScreen, int argc, char **argv)
      * function.  If not, the visuals will need to be setup before calling
      * a fb ScreenInit() function and fixed up after.
      *
-     * For most PC hardware at depths >= 8, the defaults that cfb uses
+     * For most PC hardware at depths >= 8, the defaults that fb uses
      * are not appropriate.  In this driver, we fixup the visuals after.
      */
 
@@ -2742,49 +2691,6 @@ S3VInternalScreenInit( int scrnIndex, ScreenPtr pScreen)
 	  break;
 	}
     }
-  else
-    {
-      xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Using CFB\n");
-      switch (pScrn->bitsPerPixel) {
-      case 8:
-	ret = cfbScreenInit(pScreen, FBStart,
-			    width,height,
-			    pScrn->xDpi, pScrn->yDpi,
-			    displayWidth);
-	break;
-      case 16:
-	ret = cfb16ScreenInit(pScreen, FBStart,
-			      width,height,
-			      pScrn->xDpi, pScrn->yDpi,
-			      displayWidth);
-	break;
-      case 24:
-	if (pix24bpp ==24) {
-	  ret = cfb24ScreenInit(pScreen, FBStart,
-			    width,height,
-				  pScrn->xDpi, pScrn->yDpi,
-				  displayWidth);
-	} else {
-	  ret = cfb24_32ScreenInit(pScreen, FBStart,
-				     width,height,
-				     pScrn->xDpi, pScrn->yDpi,
-				     displayWidth);
-	}
-	break;
-      case 32:
-	ret = cfb32ScreenInit(pScreen, FBStart,
-			      width,height,
-			      pScrn->xDpi, pScrn->yDpi,
-			      displayWidth);
-	break;
-      default:
-	xf86DrvMsg(scrnIndex, X_ERROR,
-		   "Internal error: invalid bpp (%d) in S3VScreenInit\n",
-		   pScrn->bitsPerPixel);
-	ret = FALSE;
-	break;
-      } /*switch*/
-    } /*if(fb)*/
   return ret;
 }
 
