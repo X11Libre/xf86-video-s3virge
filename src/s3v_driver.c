@@ -274,6 +274,7 @@ static const char *vgahwSymbols[] = {
     "vgaHWSetMmioFuncs",
     "vgaHWSetStdFuncs",
     "vgaHWUnmapMem",
+    "vgaHWddc1SetSpeedWeak",
    /* not used by ViRGE (at the moment :( ) */
    /*
     "vgaHWUnlock",
@@ -283,8 +284,8 @@ static const char *vgahwSymbols[] = {
 };
 
 static const char *xaaSymbols[] = {
-    "XAACopyROP",
-    "XAACopyROP_PM",
+    "XAAGetCopyROP",
+    "XAAGetCopyROP_PM",
     "XAADestroyInfoRec",
     "XAACreateInfoRec",
     "XAAHelpPatternROP",
@@ -364,7 +365,7 @@ static XF86ModuleVersionInfo S3VVersRec =
     MODULEVENDORSTRING,
     MODINFOSTRING1,
     MODINFOSTRING2,
-    XF86_VERSION_CURRENT,
+    XORG_VERSION_CURRENT,
     S3VIRGE_VERSION_MAJOR, S3VIRGE_VERSION_MINOR, S3VIRGE_PATCHLEVEL,
     ABI_CLASS_VIDEODRV,		       /* This is a video driver */
     ABI_VIDEODRV_VERSION,
@@ -3990,7 +3991,8 @@ S3Vddc1(int scrnIndex)
     OUTREG(DDC_REG,(tmp | 0x12));
     
     if ((pMon = xf86PrintEDID(
-	xf86DoEDID_DDC1(scrnIndex,vgaHWddc1SetSpeed,S3Vddc1Read))) != NULL)
+	xf86DoEDID_DDC1(scrnIndex,vgaHWddc1SetSpeedWeak(),
+	                S3Vddc1Read))) != NULL)
 	success = TRUE;
     xf86SetDDCproperties(pScrn,pMon);
 

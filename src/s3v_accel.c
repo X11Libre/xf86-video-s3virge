@@ -634,14 +634,14 @@ S3VSetupForScreenToScreenCopy(
     ps3v->AccelCmd = ps3v->CommonCmd | CMD_AUTOEXEC | CMD_BITBLT;
  
     if(planemask != ps3v->FullPlaneMask) {     
-        ps3v->AccelCmd |= (XAACopyROP_PM[rop] << 17) | MIX_MONO_PATT;
+        ps3v->AccelCmd |= (XAAGetCopyROP_PM(rop) << 17) | MIX_MONO_PATT;
 	WAITFIFO(4);
 	OUTREG(PAT_FG_CLR, planemask);
 	OUTREG(MONO_PAT_0, ~0);
 	OUTREG(MONO_PAT_1, ~0);
         }
     else {
-        ps3v->AccelCmd |= XAACopyROP[rop] << 17;
+        ps3v->AccelCmd |= XAAGetCopyROP(rop) << 17;
 	WAITFIFO(1);
         }
     if(xdir == 1) ps3v->AccelCmd |= CMD_XP;
@@ -781,10 +781,10 @@ S3VSetupForCPUToScreenColorExpand(
 
 
     if(planemask == ps3v->FullPlaneMask) { 
-        ps3v->AccelCmd |= XAACopyROP[rop] << 17;
+        ps3v->AccelCmd |= XAAGetCopyROP(rop) << 17;
 	WAITFIFO(3);
     } else {
-        ps3v->AccelCmd |= (XAACopyROP_PM[rop] << 17) | MIX_MONO_PATT;
+        ps3v->AccelCmd |= (XAAGetCopyROP_PM(rop) << 17) | MIX_MONO_PATT;
 	WAITFIFO(6);
 	OUTREG(MONO_PAT_0, ~0);
 	OUTREG(MONO_PAT_1, ~0);
@@ -837,13 +837,13 @@ S3VSetupForImageWrite(
 		MIX_CPUDATA | CMD_ITA_DWORD | CMD_HWCLIP | CMD_XP | CMD_YP;
  
     if(planemask != ps3v->FullPlaneMask) {     
-        ps3v->AccelCmd |= (XAACopyROP_PM[rop] << 17) | MIX_MONO_PATT;
+        ps3v->AccelCmd |= (XAAGetCopyROP_PM(rop) << 17) | MIX_MONO_PATT;
 	WAITFIFO(4);
 	OUTREG(PAT_FG_CLR, planemask);
 	OUTREG(MONO_PAT_0, ~0);
 	OUTREG(MONO_PAT_1, ~0);
     } else {
-        ps3v->AccelCmd |= XAACopyROP[rop] << 17;
+        ps3v->AccelCmd |= XAAGetCopyROP(rop) << 17;
 	WAITFIFO(1);
     }
    
