@@ -1,4 +1,4 @@
-/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/s3virge/s3v_driver.c,v 1.93 2003/11/06 18:38:05 tsi Exp $ */
+/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/s3virge/s3v_driver.c,v 1.90 2003/08/23 16:09:19 dawes Exp $ */
 
 /*
 Copyright (C) 1994-1999 The XFree86 Project, Inc.  All Rights Reserved.
@@ -364,7 +364,7 @@ static XF86ModuleVersionInfo S3VVersRec =
     MODULEVENDORSTRING,
     MODINFOSTRING1,
     MODINFOSTRING2,
-    XORG_VERSION_CURRENT,
+    XF86_VERSION_CURRENT,
     S3VIRGE_VERSION_MAJOR, S3VIRGE_VERSION_MINOR, S3VIRGE_PATCHLEVEL,
     ABI_CLASS_VIDEODRV,		       /* This is a video driver */
     ABI_VIDEODRV_VERSION,
@@ -1017,7 +1017,7 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
   vgaCRReg = vgaIOBase + 5;
 
     xf86ErrorFVerb(VERBLEV, 
-	"	S3VPreInit vgaCRIndex=%x, vgaIOBase=%x, MMIOBase=%p\n", 
+	"	S3VPreInit vgaCRIndex=%x, vgaIOBase=%x, MMIOBase=%x\n", 
 	vgaCRIndex, vgaIOBase, hwp->MMIOBase );
 
 
@@ -1348,9 +1348,8 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
 	      , lcdclk / 1000.0);
    }
 
-   S3VDisableMmio(pScrn);
    S3VUnmapMem(pScrn);
-   
+
    /* And finally set various possible option flags */
 
    ps3v->bankedMono = FALSE;
@@ -1616,8 +1615,6 @@ S3VEnterVT(int scrnIndex, int flags)
 #ifdef unmap_always
     S3VMapMem(pScrn);
 #endif
-    S3VEnableMmio(pScrn);
-    
     S3VSave(pScrn);
     return S3VModeInit(pScrn, pScrn->currentMode);
 }
@@ -1647,7 +1644,6 @@ S3VLeaveVT(int scrnIndex, int flags)
     S3VWriteMode(pScrn, vgaSavePtr, S3VSavePtr);
     					/* Restore standard register access */
 					/* and unmap memory.		    */
-    S3VDisableMmio(pScrn);
 #ifdef unmap_always
     S3VUnmapMem(pScrn);
 #endif
@@ -1907,11 +1903,11 @@ S3VSave (ScrnInfoPtr pScrn)
        { 
 
       xf86DrvMsgVerb(pScrn->scrnIndex, X_INFO, VERBLEV,
-         "MMPR regs: %08lx %08lx %08lx %08lx\n",
-	     (unsigned long)INREG(FIFO_CONTROL_REG), 
-	     (unsigned long)INREG(MIU_CONTROL_REG), 
-	     (unsigned long)INREG(STREAMS_TIMEOUT_REG), 
-	     (unsigned long)INREG(MISC_TIMEOUT_REG));
+         "MMPR regs: %08x %08x %08x %08x\n",
+	     INREG(FIFO_CONTROL_REG), 
+	     INREG(MIU_CONTROL_REG), 
+	     INREG(STREAMS_TIMEOUT_REG), 
+	     INREG(MISC_TIMEOUT_REG));
        }
 
       PVERB5("\n\nViRGE driver: saved current video mode. Register dump:\n\n");
@@ -2477,6 +2473,8 @@ S3VUnmapMem(ScrnInfoPtr pScrn)
     vgaHWUnmapMem( pScrn );
     ps3v->PrimaryVidMapped = FALSE;
   }
+
+  S3VDisableMmio(pScrn);
 
   xf86UnMapVidMem(pScrn->scrnIndex, (pointer)ps3v->MapBase,
 		  S3_NEWMMIO_REGSIZE);
@@ -3526,7 +3524,6 @@ S3VCloseScreen(int scrnIndex, ScreenPtr pScreen)
   if (pScrn->vtSema) {
       S3VWriteMode(pScrn, vgaSavePtr, S3VSavePtr);
       vgaHWLock(hwp);
-      S3VDisableMmio(pScrn);
       S3VUnmapMem(pScrn);
   }
 

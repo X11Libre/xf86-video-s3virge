@@ -1,4 +1,4 @@
-/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/s3virge/s3v_xv.c,v 1.10tsi Exp $ */
+/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/s3virge/s3v_xv.c,v 1.8 2003/04/23 21:51:43 tsi Exp $ */
 /*
 Copyright (C) 2000 The XFree86 Project, Inc.  All Rights Reserved.
 
@@ -458,7 +458,7 @@ S3VSetupImageVideoOverlay(ScreenPtr pScreen)
     adapt->QueryImageAttributes = S3VQueryImageAttributes;
 
     /* gotta uninit this someplace */
-    REGION_NULL(pScreen, &(ps3v->portPrivate->clip));
+    REGION_INIT(pScreen, &(ps3v->portPrivate->clip), NullBox, 0); 
 
     S3VResetVideoOverlay(pScrn);
 
@@ -471,6 +471,13 @@ S3VStopVideo(ScrnInfoPtr pScrn, pointer data, Bool shutdown)
 {
   S3VPtr ps3v = S3VPTR(pScrn);
   S3VPortPrivPtr pPriv = ps3v->portPrivate;
+
+  vgaHWPtr hwp = VGAHWPTR(pScrn);
+  /*  S3VPtr ps3v = S3VPTR(pScrn);*/
+  int vgaCRIndex, vgaCRReg, vgaIOBase;
+  vgaIOBase = hwp->IOBase;
+  vgaCRIndex = vgaIOBase + 4;
+  vgaCRReg = vgaIOBase + 5;
 
 #if 0
   MGAPtr pMga = MGAPTR(pScrn);
@@ -509,8 +516,8 @@ S3VStopVideo(ScrnInfoPtr pScrn, pointer data, Bool shutdown)
 	pPriv->area = NULL;
      }
      pPriv->videoStatus = 0;
-#if 0
   } else {
+#if 0
      if(pPriv->videoStatus & CLIENT_VIDEO_ON) {
 	pPriv->videoStatus |= OFF_TIMER;
 	pPriv->offTime = currentTime.milliseconds + OFF_DELAY; 
@@ -796,6 +803,8 @@ S3VPutImage(
    int top, left, npixels, nlines;
    BoxRec dstBox;
    CARD32 tmp;
+   static int once = 1;
+   static int once2 = 1;
 
    /* If streams aren't enabled, do nothing */
    if(!ps3v->NeedSTREAMS)
@@ -881,6 +890,7 @@ S3VPutImage(
 	xf86XVCopyYUV12ToPacked(buf + (top * srcPitch) + (left >> 1), 
 				buf + offset2, buf + offset3, dst_start,
 				srcPitch, srcPitch2, dstPitch, nlines, npixels);
+	once2 = 0;
 	break;
     case FOURCC_UYVY:
     case FOURCC_YUY2:
@@ -888,6 +898,7 @@ S3VPutImage(
 	buf += (top * srcPitch) + left;
 	nlines = ((y2 + 0xffff) >> 16) - top;
 	xf86XVCopyPacked(buf, dst_start, srcPitch, dstPitch, nlines, npixels);
+	once = 0;
         break;
     }
 
