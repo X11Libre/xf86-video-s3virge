@@ -1,4 +1,4 @@
-/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/s3virge/s3v_accel.c,v 1.23 2001/12/13 18:01:50 eich Exp $ */
+/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/s3virge/s3v_accel.c,v 1.25 2003/11/06 18:38:05 tsi Exp $ */
 
 /*
 Copyright (C) 1994-1999 The XFree86 Project, Inc.  All Rights Reserved.
@@ -245,7 +245,7 @@ S3VNopAllCmdSets(ScrnInfoPtr pScrn)
 
   if (xf86GetVerbosity() > 1) {
      ErrorF("\tTrio3D -- S3VNopAllCmdSets: SubsysStats#1 = 0x%08lx\n",
-        IN_SUBSYS_STAT());
+        (unsigned long)IN_SUBSYS_STAT());
   }
 
   mem_barrier();
@@ -267,7 +267,7 @@ S3VNopAllCmdSets(ScrnInfoPtr pScrn)
 
   if (xf86GetVerbosity() > 1) {
      ErrorF("\tTrio3D -- S3VNopAllCmdSets: SubsysStats#2 = 0x%08lx\n",
-        IN_SUBSYS_STAT());
+        (unsigned long)IN_SUBSYS_STAT());
   }
 }
 
@@ -335,8 +335,8 @@ S3VGEReset(ScrnInfoPtr pScrn, int from_timeout, int line, char *file)
       VGAOUT8(vgaCRReg, tmp & ~0x02);
       usleep(10000);
 
-      xf86ErrorFVerb(VERBLEV, "	S3VGEReset sub_stat=%x \n", 
-   	IN_SUBSYS_STAT()
+      xf86ErrorFVerb(VERBLEV, "	S3VGEReset sub_stat=%lx \n", 
+   	(unsigned long)IN_SUBSYS_STAT()
 	);
 
       if (!from_timeout) 
@@ -415,8 +415,8 @@ S3VGEReset(ScrnInfoPtr pScrn, int from_timeout, int line, char *file)
 
       if((IN_SUBSYS_STAT() & 0x3f802000 & 0x20002000) != 0x20002000) {
         if(xf86GetVerbosity() > 1)
-          ErrorF("restarting S3 graphics engine reset %2d ..."
-                 "%lx\n",r,IN_SUBSYS_STAT());
+          ErrorF("restarting S3 graphics engine reset %2d ...%lx\n",
+		 r, (unsigned long)IN_SUBSYS_STAT());
       }
         else
           break;
