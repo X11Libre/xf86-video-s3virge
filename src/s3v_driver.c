@@ -3990,7 +3990,7 @@ S3Vddc1(int scrnIndex)
     OUTREG(DDC_REG,(tmp | 0x12));
     
     if ((pMon = xf86PrintEDID(
-	xf86DoEDID_DDC1(scrnIndex,LoaderSymbol("vgaHWddc1SetSpeed"),
+	xf86DoEDID_DDC1(scrnIndex,vgaHWddc1SetSpeedWeak(),
 	                S3Vddc1Read))) != NULL)
 	success = TRUE;
     xf86SetDDCproperties(pScrn,pMon);
