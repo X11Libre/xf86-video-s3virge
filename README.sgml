@@ -1,4 +1,4 @@
-<!DOCTYPE linuxdoc PUBLIC "-//XFree86//DTD linuxdoc//EN" [
+<!DOCTYPE linuxdoc PUBLIC "-//Xorg//DTD linuxdoc//EN" [
 <!ENTITY % defs SYSTEM "defs.ent"> %defs;
 ]>
 
@@ -8,18 +8,15 @@
 <date>19 Dec 2001
 
 <ident>
-$XFree86: xc/programs/Xserver/hw/xfree86/doc/sgml/s3virge.sgml,v 1.6 2003/02/13 03:21:33 dawes Exp $
 </ident>
 
 <toc>
 
 <sect> Supported hardware
 <p>
-The s3virge driver in XFree86 &relvers; supports the S3 ViRGE, ViRGE DX, GX, GX2, MX, MX+, and VX chipsets.  It also supports Trio3D and Trio3D/2x chips.  A majority of testing is done on ViRGE DX chips, making them the most stable to date.  This release has added support for doublescan modes on DX.
+The s3virge driver in X11R&relvers; supports the S3 ViRGE, ViRGE DX, GX, GX2, MX, MX+, and VX chipsets.  It also supports Trio3D and Trio3D/2x chips.  A majority of testing is done on ViRGE DX chips, making them the most stable to date.  This release has added support for doublescan modes on DX.
 
-This driver is moderately stable, however please use caution with any new install.  Please report any problems to
-<email>XFree86@XFree86.org</email>
-using the appropriate bug report sheet. 
+This driver is moderately stable, however please use caution with any new install.  Please report any problems to bugzilla.freedesktop.org, using the xorg component.
 
 <sect>Features:
 <p>
@@ -44,11 +41,11 @@ these in your "Device" section.
 <p>
 
 The driver has several supported options which are documented in the s3virge man
-page.  Please refer to it for additional details about XF86Config options.
+page.  Please refer to it for additional details about configuration options.
 
 <sect>Support:
 <p>
-For support with XFree86 video drivers please refer to our web site at <url name="XFree86" url="http://www.XFree86.org">.  For problems not addressed in the web page please contact our support email address  <email>XFree86@XFree86.org</email>
+For support with X11R&relvers video drivers please refer to our web site at <url name="wiki.x.org" url="http://wiki.x.org">. 
 
 <sect>Authors
 <p>
