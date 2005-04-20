@@ -69,7 +69,7 @@ in this Software without prior written authorization from the XFree86 Project.
 #include "vbe.h"
 
 #include "xf86xv.h"
-#include "Xv.h"
+#include <X11/extensions/Xv.h>
 #include "fourcc.h"
 
 #ifndef _S3V_VGAHWMMIO_H

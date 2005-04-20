@@ -54,7 +54,7 @@ in this Software without prior written authorization from the XFree86 Project.
 
 #include "globals.h"
 #define DPMS_SERVER
-#include "extensions/dpms.h"
+#include <X11/extensions/dpms.h>
 
 #ifndef USE_INT10
 #define USE_INT10 0
