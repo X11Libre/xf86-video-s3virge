@@ -132,7 +132,7 @@ static int pix24bpp = 0;
  * this DriverRec be an upper-case version of the driver name.
  */
 
-DriverRec S3VIRGE =
+_X_EXPORT DriverRec S3VIRGE =
 {
     S3VIRGE_DRIVER_VERSION,
     S3VIRGE_DRIVER_NAME,
@@ -367,7 +367,11 @@ static XF86ModuleVersionInfo S3VVersRec =
  *
  * Its name has to be the driver name followed by ModuleData.
  */
-XF86ModuleData s3virgeModuleData = { &S3VVersRec, s3virgeSetup, NULL };
+_X_EXPORT XF86ModuleData s3virgeModuleData = {
+    &S3VVersRec,
+    s3virgeSetup,
+    NULL
+};
 
 static pointer
 s3virgeSetup(pointer module, pointer opts, int *errmaj, int *errmin)
