@@ -22,8 +22,8 @@
 
 AC_PREREQ(2.57)
 AC_INIT([xf86-video-s3virge],
-        0.1.0,
-        [ajax@freedesktop.org],
+        1.8.6,
+        [https://bugs.freedesktop.org/enter_bug.cgi?product=xorg],
         xf86-video-s3virge)
 
 AC_CONFIG_SRCDIR([Makefile.am])
@@ -56,6 +56,8 @@ AC_HEADER_STDC
 
 AC_SUBST([XORG_CFLAGS])
 AC_SUBST([moduledir])
+
+XORG_RELEASE_VERSION
 
 AC_OUTPUT([
 	Makefile
