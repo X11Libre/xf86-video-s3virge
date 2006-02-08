@@ -218,12 +218,7 @@ typedef struct tagS3VRec {
   /* Flag indicating if vgaHWMapMem was */
   /* used successfully for this screen */
   Bool		PrimaryVidMapped;
-  /* Clock value */
-  int			dacSpeedBpp;
-  int			minClock;
-  /* Maximum clock for present bpp */
-  int			maxClock;
-  int			HorizScaleFactor;
+  int		HorizScaleFactor;
   Bool		bankedMono;
   /* Memory Clock */
   int 		MCLK;

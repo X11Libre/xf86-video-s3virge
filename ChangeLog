@@ -1,3 +1,11 @@
+2006-02-08  Luc Verhaegen <libv@skynet.be>
+
+	* src/s3v.h:
+	* src/s3v_driver.c: (S3VPreInit):
+
+	Remove another insane use of pScrn->clock. Code ended up being ignored
+	anyway.
+
 2005-12-20  Kevin E. Martin  <kem-at-freedesktop-dot-org>
 
 	* configure.ac:
