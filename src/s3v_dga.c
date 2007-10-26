@@ -67,12 +67,7 @@ in this Software without prior written authorization from the XFree86 Project.
 #include "xaa.h"
 #include "xaalocal.h"
 #include "s3v.h"
-#if 0
-#include "mga_bios.h"
-#include "mga.h"
-#include "mga_reg.h"
-#include "mga_macros.h"
-#endif
+
 #include "dgaproc.h"
 
 
@@ -84,10 +79,7 @@ static void S3V_SetViewport(ScrnInfoPtr, int, int, int);
 static void S3V_FillRect(ScrnInfoPtr, int, int, int, int, unsigned long);
 static void S3V_BlitRect(ScrnInfoPtr, int, int, int, int, int, int);
 /* dummy... */
-#if 0
-static void MGA_BlitTransRect(ScrnInfoPtr, int, int, int, int, int, int, 
-					unsigned long);
-#endif
+
 
 static
 DGAFunctionRec S3V_DGAFuncs = {
@@ -326,19 +318,7 @@ S3V_BlitRect(
     }
 }
 
-#if 0
-static void 
-MGA_BlitTransRect(
-   ScrnInfoPtr pScrn, 
-   int srcx, int srcy, 
-   int w, int h, 
-   int dstx, int dsty,
-   unsigned long color
-){
-  /* this one should be separate since the XAA function would
-     prohibit usage of ~0 as the key */
-}
-#endif
+
 
 static Bool 
 S3V_OpenFramebuffer(
