@@ -3685,9 +3685,9 @@ S3VEnableMmio(ScrnInfoPtr pScrn)
    * (EE 06/03/99)
    */
   outb(vgaCRIndex, 0x59);         /*@@@EE*/
-  outb(vgaCRReg, PCI_REGION_MEM(ps3v->PciInfo, 0, REGION_MEM) >> 24);  
+  outb(vgaCRReg, PCI_REGION_BASE(ps3v->PciInfo, 0, REGION_MEM) >> 24);  
   outb(vgaCRIndex, 0x5A);
-  outb(vgaCRReg, PCI_REGION_MEM(ps3v->PciInfo, 0, REGION_MEM) >> 16);
+  outb(vgaCRReg, PCI_REGION_BASE(ps3v->PciInfo, 0, REGION_MEM) >> 16);
   outb(vgaCRIndex, 0x53);
 #endif
   /* Save register for restore */
