@@ -28,6 +28,8 @@ in this Software without prior written authorization from the XFree86 Project.
 #ifndef _S3V_H
 #define _S3V_H
 
+#include "s3v_pcirename.h"
+
 #include <string.h>
 
 /* All drivers should typically include these */

@@ -29,6 +29,7 @@ in this Software without prior written authorization from the XFree86 Project.
 #include "config.h"
 #endif
 
+#include <unistd.h>
 #include "xf86Resources.h"
 /* Needed by Resources Access Control (RAC) */
 #include "xf86RAC.h"
@@ -418,7 +419,7 @@ s3virgeSetup(pointer module, pointer opts, int *errmaj, int *errmin)
 #endif /* XFree86LOADER */
 
 
-static unsigned char *find_bios_string(PCITAG Tag, int BIOSbase, char *match1, char *match2)
+static unsigned char *find_bios_string(S3VPtr ps3v, int BIOSbase, char *match1, char *match2)
 {
 #define BIOS_BSIZE 1024
 #define BIOS_BASE  0xc0000
@@ -429,8 +430,13 @@ static unsigned char *find_bios_string(PCITAG Tag, int BIOSbase, char *match1, c
 
    if (!init) {
       init = 1;
-      if (xf86ReadDomainMemory(Tag, BIOSbase, BIOS_BSIZE, bios) != BIOS_BSIZE)
+#ifndef XSERVER_LIBPCIACCESS
+      if (xf86ReadDomainMemory(ps3v->PciTag, BIOSbase, BIOS_BSIZE, bios) != BIOS_BSIZE)
 	 return NULL;
+#else
+      if (pci_device_read_rom(ps3v->PciInfo, bios))
+	return NULL;
+#endif
       if ((bios[0] != 0x55) || (bios[1] != 0xaa))
 	 return NULL;
    }
@@ -521,9 +527,12 @@ S3VProbe(DriverPtr drv, int flags)
 	 */
 	return FALSE;
     }
+
+#ifndef XSERVER_LIBPCIACCESS
     if (xf86GetPciVideoInfo() == NULL) {
 	return FALSE;
     }
+#endif
 
     numUsed = xf86MatchPciInstances(S3VIRGE_NAME, PCI_S3_VENDOR_ID,
 				    S3VChipsets, S3VPciChipsets, devSections,
@@ -941,7 +950,7 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
 		   ps3v->Chipset);
     } else {
 	from = X_PROBED;
-	ps3v->Chipset = ps3v->PciInfo->chipType;
+	ps3v->Chipset = PCI_DEV_DEVICE_ID(ps3v->PciInfo);
 	pScrn->chipset = (char *)xf86TokenToString(S3VChipsets, ps3v->Chipset);
     }								    
     
@@ -950,7 +959,7 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
 	xf86DrvMsg(pScrn->scrnIndex, X_CONFIG, "ChipRev override: %d\n",
 		   ps3v->ChipRev);
     } else {
-	ps3v->ChipRev = ps3v->PciInfo->chipRev;
+        ps3v->ChipRev = PCI_DEV_REVISION(ps3v->PciInfo);
     }
     xfree(pEnt);
     
@@ -975,8 +984,10 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
 
     xf86DrvMsg(pScrn->scrnIndex, from, "Chipset: \"%s\"\n", pScrn->chipset);
 	
+#ifndef XSERVER_LIBPCIACCESS
     ps3v->PciTag = pciTag(ps3v->PciInfo->bus, ps3v->PciInfo->device,
 			  ps3v->PciInfo->func);
+#endif
 
     /* Handle XVideo after we know chipset, so we can give an */
     /* intelligent comment about support */
@@ -1197,7 +1208,7 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
     *      <= 8bpp: 191500
     */
 
-   if (find_bios_string(ps3v->PciTag, BIOS_BASE, "S3 86C325",
+   if (find_bios_string(ps3v, BIOS_BASE, "S3 86C325",
 			"MELCO WGP-VG VIDEO BIOS") != NULL) {
       if (xf86GetVerbosity())
 	 xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "MELCO BIOS found\n");
@@ -2298,15 +2309,30 @@ S3VMapMem(ScrnInfoPtr pScrn)
 					/* so that we can use registers map */
 					/* structure - see newmmio.h */
 					/* around 0x10000 from MemBase */
+#ifndef XSERVER_LIBPCIACCESS
   ps3v->MapBase = xf86MapPciMem(pScrn->scrnIndex, VIDMEM_MMIO, ps3v->PciTag,
-			ps3v->PciInfo->memBase[0] + S3_NEWMMIO_REGBASE,
-			S3_NEWMMIO_REGSIZE);
+				PCI_REGION_BASE(ps3v->PciInfo, 0, REGION_MEM) + S3_NEWMMIO_REGBASE,
+				S3_NEWMMIO_REGSIZE);
 
   ps3v->MapBaseDense = xf86MapPciMem(pScrn->scrnIndex,
-			VIDMEM_MMIO_32BIT,
-			ps3v->PciTag,
-			ps3v->PciInfo->memBase[0] + S3_NEWMMIO_REGBASE,
-			0x8000);
+				     VIDMEM_MMIO_32BIT,
+				     ps3v->PciTag,
+				     PCI_REGION_BASE(ps3v->PciInfo, 0, REGION_MEM) + S3_NEWMMIO_REGBASE,
+				     0x8000);
+#else
+  {
+    void** result = (void**)&ps3v->MapBase;
+    int err = pci_device_map_range(ps3v->PciInfo,
+				   PCI_REGION_BASE(ps3v->PciInfo, 0, REGION_MEM) + S3_NEWMMIO_REGBASE,
+				   S3_NEWMMIO_REGSIZE,
+				   PCI_DEV_MAP_FLAG_WRITABLE,
+				   result);
+    
+    if (err) 
+      return FALSE;
+  }
+  ps3v->MapBaseDense = ps3v->MapBase;
+#endif
 
   if( !ps3v->MapBase ) {
     xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
@@ -2315,9 +2341,25 @@ S3VMapMem(ScrnInfoPtr pScrn)
   }
 					/* Map the framebuffer */
   if (ps3v->videoRambytes) { /* not set in PreInit() */
+#ifndef XSERVER_LIBPCIACCESS
       ps3v->FBBase = xf86MapPciMem(pScrn->scrnIndex, VIDMEM_FRAMEBUFFER, 
-				   ps3v->PciTag, ps3v->PciInfo->memBase[0],
+				   ps3v->PciTag, PCI_REGION_BASE(ps3v->PciInfo, 0, REGION_MEM),
 				   ps3v->videoRambytes );
+
+#else
+      {
+	void** result = (void**)&ps3v->FBBase;
+	int err = pci_device_map_range(ps3v->PciInfo,
+				       PCI_REGION_BASE(ps3v->PciInfo, 0, REGION_MEM),
+				       ps3v->videoRambytes,
+				       PCI_DEV_MAP_FLAG_WRITABLE |
+				       PCI_DEV_MAP_FLAG_WRITE_COMBINE,
+				       result);
+	
+	if (err) 
+	  return FALSE;
+      }
+#endif
 
       if( !ps3v->FBBase ) {
 	  xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
@@ -2329,7 +2371,7 @@ S3VMapMem(ScrnInfoPtr pScrn)
       ps3v->FBStart = ps3v->FBBase;
   }
   
-  pScrn->memPhysBase = ps3v->PciInfo->memBase[0];
+  pScrn->memPhysBase = PCI_REGION_BASE(ps3v->PciInfo, 0, REGION_MEM);
   pScrn->fbOffset = 0;
 
   				/* Set up offset to hwcursor memory area */
@@ -2376,14 +2418,24 @@ S3VUnmapMem(ScrnInfoPtr pScrn)
     ps3v->PrimaryVidMapped = FALSE;
   }
 
+#ifndef XSERVER_LIBPCIACCESS
   xf86UnMapVidMem(pScrn->scrnIndex, (pointer)ps3v->MapBase,
 		  S3_NEWMMIO_REGSIZE);
+#else
+  pci_device_unmap_range(ps3v->PciInfo, ps3v->MapBase,
+			 S3_NEWMMIO_REGSIZE);
+#endif
+
+#ifndef XSERVER_LIBPCIACCESS
   if (ps3v->FBBase)
       xf86UnMapVidMem(pScrn->scrnIndex, (pointer)ps3v->FBBase,
 		      ps3v->videoRambytes);
   xf86UnMapVidMem(pScrn->scrnIndex, (pointer)ps3v->MapBaseDense,
 		  0x8000);
-
+#else
+  pci_device_unmap_range(ps3v->PciInfo, ps3v->FBBase,
+			 ps3v->videoRambytes);
+#endif
   return;
 }
 
@@ -3633,9 +3685,9 @@ S3VEnableMmio(ScrnInfoPtr pScrn)
    * (EE 06/03/99)
    */
   outb(vgaCRIndex, 0x59);         /*@@@EE*/
-  outb(vgaCRReg, ps3v->PciInfo->memBase[0] >> 24);  
+  outb(vgaCRReg, PCI_REGION_MEM(ps3v->PciInfo, 0, REGION_MEM) >> 24);  
   outb(vgaCRIndex, 0x5A);
-  outb(vgaCRReg, ps3v->PciInfo->memBase[0] >> 16);
+  outb(vgaCRReg, PCI_REGION_MEM(ps3v->PciInfo, 0, REGION_MEM) >> 16);
   outb(vgaCRIndex, 0x53);
 #endif
   /* Save register for restore */
