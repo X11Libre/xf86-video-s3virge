@@ -1,4 +1,3 @@
-/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/s3virge/s3v_dga.c,v 1.7 2002/01/14 18:02:58 dawes Exp $ */
 
 /*
 Copyright (C) 1994-2000 The XFree86 Project, Inc.  All Rights Reserved.
