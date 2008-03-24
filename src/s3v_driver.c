@@ -247,7 +247,6 @@ static const OptionInfoRec S3VOptions[] =
    { OPTION_SWCURSOR,		"SWCursor",     OPTV_BOOLEAN,	{0}, FALSE },
    { OPTION_SHADOW_FB,          "ShadowFB",	OPTV_BOOLEAN,	{0}, FALSE },
    { OPTION_ROTATE, 	        "Rotate",	OPTV_ANYSTR,	{0}, FALSE },
-   { OPTION_FB_DRAW,            "UseFB",	OPTV_BOOLEAN,	{0}, FALSE },
    { OPTION_MX_CR3A_FIX,        "mxcr3afix",	OPTV_BOOLEAN,	{0}, FALSE },
    { OPTION_XVIDEO,             "XVideo",	OPTV_BOOLEAN,	{0}, FALSE },
    {-1, NULL, OPTV_NONE,	{0}, FALSE}
@@ -876,12 +875,6 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
 	ps3v->hwcursor = FALSE;
     }
 
-    ps3v->UseFB = TRUE;
-    xf86DrvMsg(pScrn->scrnIndex, X_DEFAULT, "Using fb.\n");
-    if (xf86IsOptionSet(ps3v->Options, OPTION_FB_DRAW)) 
-        xf86DrvMsg(pScrn->scrnIndex, X_CONFIG,
-	           "UseFB option is deprecated.\n");
-
     if (xf86IsOptionSet(ps3v->Options, OPTION_MX_CR3A_FIX)) 
       {
 	if (xf86GetOptValBool(ps3v->Options, OPTION_MX_CR3A_FIX ,&ps3v->mx_cr3a_fix))
@@ -1429,15 +1422,12 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
     xf86SetDpi(pScrn, 0, 0);
 
     /* Load bpp-specific modules */
-    if( ps3v->UseFB )
-      {
-	if( xf86LoadSubModule(pScrn, "fb") == NULL )
-	  {
-	      S3VFreeRec(pScrn);
-	      return FALSE;
-	  }	       
-	xf86LoaderReqSymLists(fbSymbols, NULL);       
-      }
+    if( xf86LoadSubModule(pScrn, "fb") == NULL )
+    {
+	S3VFreeRec(pScrn);
+	return FALSE;
+    }	       
+    xf86LoaderReqSymLists(fbSymbols, NULL);       
 
     /* Load XAA if needed */
     if (!ps3v->NoAccel || ps3v->hwcursor ) {
@@ -2522,8 +2512,7 @@ S3VScreenInit(int scrnIndex, ScreenPtr pScreen, int argc, char **argv)
   }
 
   /* must be after RGB ordering fixed */
-  if (ps3v->UseFB)
-    fbPictureInit (pScreen, 0, 0);
+  fbPictureInit (pScreen, 0, 0);
     
   	      				/* Initialize acceleration layer */
   if (!ps3v->NoAccel) {
@@ -2656,27 +2645,23 @@ S3VInternalScreenInit( int scrnIndex, ScreenPtr pScreen)
      * pScreen fields.
      */
 
-  if( ps3v->UseFB )
+    switch (pScrn->bitsPerPixel)
     {
-      xf86DrvMsg(pScrn->scrnIndex, X_CONFIG, "Using FB\n");
-
-      switch (pScrn->bitsPerPixel) 
-	{
 	case 8:
 	case 16:
 	case 24:
-	  ret = fbScreenInit(pScreen, FBStart, pScrn->virtualX,
-			     pScrn->virtualY, pScrn->xDpi, pScrn->yDpi,
-			     displayWidth, pScrn->bitsPerPixel);
-	  break;
+	    ret = fbScreenInit(pScreen, FBStart, pScrn->virtualX,
+			       pScrn->virtualY, pScrn->xDpi, pScrn->yDpi,
+			       displayWidth, pScrn->bitsPerPixel);
+	    break;
 	default:
-	  xf86DrvMsg(scrnIndex, X_ERROR,
-		     "Internal error: invalid bpp (%d) in S3VScreenInit\n",
-		     pScrn->bitsPerPixel);
-	  ret = FALSE;
-	  break;
-	}
+	    xf86DrvMsg(scrnIndex, X_ERROR,
+		       "Internal error: invalid bpp (%d) in S3VScreenInit\n",
+		       pScrn->bitsPerPixel);
+	    ret = FALSE;
+	    break;
     }
+
   return ret;
 }
 
