@@ -1427,19 +1427,6 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
 
     /* Set display resolution */
     xf86SetDpi(pScrn, 0, 0);
-    					/* When running the STREAMS processor */
-					/* the max. stride is limited to 4096-1 */
-					/* so this is the virtualX limit. */
-					/* STREAMS is needed for 24 & 32 bpp, */
-					/* (all depth 24 modes) */
-					/* This should never happen... we */
-					/* checked it before ValidateModes */
-    if ( ((pScrn->depth == 24) || (pScrn->depth == 16)) && 
-         ((pScrn->bitsPerPixel/8) * pScrn->virtualX > 4095) ) {
-      xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "Virtual width to large for ViRGE\n");
-      S3VFreeRec(pScrn);
-      return FALSE;
-    }
 
     /* Load bpp-specific modules */
     if( ps3v->UseFB )
@@ -2700,8 +2687,12 @@ S3VInternalScreenInit( int scrnIndex, ScreenPtr pScreen)
 static ModeStatus
 S3VValidMode(int index, DisplayModePtr mode, Bool verbose, int flags)
 {
+    ScrnInfoPtr pScrn = xf86Screens[scrnIndex];
 
-  return MODE_OK;
+    if ((pScrn->bitsPerPixel + 7)/8 * mode->HDisplay > 4095)
+	return MODE_VIRTUAL_X;
+
+    return MODE_OK;
 }
 
 
