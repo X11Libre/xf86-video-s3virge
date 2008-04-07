@@ -2650,6 +2650,7 @@ S3VInternalScreenInit( int scrnIndex, ScreenPtr pScreen)
 	case 8:
 	case 16:
 	case 24:
+	case 32:
 	    ret = fbScreenInit(pScreen, FBStart, pScrn->virtualX,
 			       pScrn->virtualY, pScrn->xDpi, pScrn->yDpi,
 			       displayWidth, pScrn->bitsPerPixel);
