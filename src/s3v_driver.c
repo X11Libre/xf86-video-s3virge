@@ -2673,7 +2673,7 @@ S3VInternalScreenInit( int scrnIndex, ScreenPtr pScreen)
 static ModeStatus
 S3VValidMode(int index, DisplayModePtr mode, Bool verbose, int flags)
 {
-    ScrnInfoPtr pScrn = xf86Screens[scrnIndex];
+    ScrnInfoPtr pScrn = xf86Screens[index];
 
     if ((pScrn->bitsPerPixel + 7)/8 * mode->HDisplay > 4095)
 	return MODE_VIRTUAL_X;
