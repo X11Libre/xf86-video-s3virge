@@ -1232,12 +1232,12 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
        * Toshiba Tecra 5x0/7x0 seems to use 28.636 MHz
        * Compaq Armada 7x00 uses 14.318 MHz
        */
-      if (find_bios_string(ps3v->PciTag, BIOS_BASE, "COMPAQ M5 BIOS", NULL) != NULL) {
+      if (find_bios_string(ps3v, BIOS_BASE, "COMPAQ M5 BIOS", NULL) != NULL) {
 	 if (xf86GetVerbosity())
 	    xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "COMPAQ M5 BIOS found\n");
 	 /* ps3v->refclk_fact = 1.0; */
       }
-      else if (find_bios_string(ps3v->PciTag, BIOS_BASE, "TOSHIBA Video BIOS", NULL) != NULL) {
+      else if (find_bios_string(ps3v, BIOS_BASE, "TOSHIBA Video BIOS", NULL) != NULL) {
 	 if (xf86GetVerbosity())
 	    xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "TOSHIBA Video BIOS found\n");
 	 /* ps3v->refclk_fact = 2.0; */
