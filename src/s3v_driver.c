@@ -29,9 +29,12 @@ in this Software without prior written authorization from the XFree86 Project.
 #endif
 
 #include <unistd.h>
+
+#ifndef XSERVER_LIBPCIACCESS
 #include "xf86Resources.h"
 /* Needed by Resources Access Control (RAC) */
 #include "xf86RAC.h"
+#endif
 
 #include "xf86DDC.h"
 #include "vbe.h"
@@ -791,11 +794,13 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
     
     pEnt = xf86GetEntityInfo(pScrn->entityList[0]);
     
+#ifndef XSERVER_LIBPCIACCESS
     if (pEnt->resources) {
 	xfree(pEnt);
 	S3VFreeRec(pScrn);
 	return FALSE;
     }
+#endif
 
 #if USE_INT10
     if (xf86LoadSubModule(pScrn, "int10")) {
@@ -812,9 +817,11 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
     }
 
     ps3v->PciInfo = xf86GetPciInfoForEntity(pEnt->index);
+#ifndef XSERVER_LIBPCIACCESS
     xf86RegisterResources(pEnt->index,NULL,ResNone);
     xf86SetOperatingState(resVgaIo, pEnt->index, ResUnusedOpr);
     xf86SetOperatingState(resVgaMem, pEnt->index, ResDisableOpr);
+#endif
 
     /*
      * Set the Chipset and ChipRev, allowing config file entries to
