@@ -30,6 +30,7 @@ in this Software without prior written authorization from the XFree86 Project.
 
 #include <unistd.h>
 
+#include "xf86.h"
 #if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 6
 #include "xf86Resources.h"
 /* Needed by Resources Access Control (RAC) */
