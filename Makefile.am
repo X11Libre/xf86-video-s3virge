@@ -27,3 +27,10 @@ README: README.sgml
 endif
 
 EXTRA_DIST = CALLMAP TODO_NOTES README.sgml
+
+.PHONY: ChangeLog
+
+ChangeLog:
+	$(CHANGELOG_CMD)
+
+dist-hook: ChangeLog
