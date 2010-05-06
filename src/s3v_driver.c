@@ -2326,8 +2326,6 @@ S3VScreenInit(int scrnIndex, ScreenPtr pScreen, int argc, char **argv)
   pScrn = xf86Screens[pScreen->myNum];
   					/* Get S3V rec */
   ps3v = S3VPTR(pScrn);
-  					/* Make sure we have card access */
-/*  xf86EnableAccess(pScrn);*/
    					/* Map MMIO regs and framebuffer */
   if( !S3VMapMem(pScrn) )
     return FALSE;
