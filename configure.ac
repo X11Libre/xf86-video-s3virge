@@ -90,8 +90,6 @@ AC_SUBST([moduledir])
 DRIVER_NAME=s3virge
 AC_SUBST([DRIVER_NAME])
 
-XORG_CHECK_LINUXDOC
-
 AC_OUTPUT([
 	Makefile
 	src/Makefile
