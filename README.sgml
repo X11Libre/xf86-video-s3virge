@@ -1,14 +1,11 @@
 <!DOCTYPE linuxdoc PUBLIC "-//Xorg//DTD linuxdoc//EN" [
-<!ENTITY % defs SYSTEM "defs.ent"> %defs;
+<!ENTITY % defs SYSTEM "X11/defs.ent"> %defs;
 ]>
 
 <article>
 <title> Information for S3 ViRGE Users
 <author>The XFree86 Project Inc.
 <date>19 Dec 2001
-
-<ident>
-</ident>
 
 <toc>
 
@@ -51,11 +48,11 @@ For support with X11R&relvers video drivers please refer to our web site at <url
 <p>
 
 <itemize>
-<item>Mark Vojkovich <email>mvojkovich@nvidia.com</email>
+<item>Mark Vojkovich <url url="mailto:mvojkovich@nvidia.com">
 <item>Sebastien Marineau
-<item>Harald Koenig <email>koenig@tat.physik.uni-tuebingen.de</email>
-<item>Matt Grossman <email>mattg@oz.net</email>
-<item>Kevin Brosius <email>cobra@compuserve.com</email>
+<item>Harald Koenig <url url="mailto:koenig@tat.physik.uni-tuebingen.de">
+<item>Matt Grossman <url url="mailto:mattg@oz.net">
+<item>Kevin Brosius <url url="mailto:cobra@compuserve.com">
 </itemize>
 
 </article>
