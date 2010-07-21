@@ -27,7 +27,7 @@ AC_INIT([xf86-video-s3virge],
         [xf86-video-s3virge])
 
 AC_CONFIG_SRCDIR([Makefile.am])
-AM_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR(.)
 
 AM_INIT_AUTOMAKE([foreign dist-bzip2])
