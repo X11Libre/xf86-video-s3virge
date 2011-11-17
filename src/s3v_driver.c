@@ -3523,7 +3523,7 @@ S3VEnableMmio(ScrnInfoPtr pScrn)
   hwp = VGAHWPTR(pScrn);
   ps3v = S3VPTR(pScrn);
 
-#if ABI_VIDEODRV_VERSION < 12
+#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 12
   PIOOffset = hwp->PIOOffset;
 #endif
   
@@ -3591,7 +3591,7 @@ S3VDisableMmio(ScrnInfoPtr pScrn)
   ps3v = S3VPTR(pScrn);
 
   vgaCRIndex = hwp->IOBase + 4;
-#if ABI_VIDEODRV_VERSION < 12
+#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 12
   vgaCRIndex += hwp->PIOOffset;
 #endif
   vgaCRReg = vgaCRIndex + 1;
