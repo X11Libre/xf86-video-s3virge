@@ -519,7 +519,7 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
      */
     if (!vgaHWGetHWRec(pScrn))
 	return FALSE;
-    
+    vgaHWSetStdFuncs(VGAHWPTR(pScrn));
 
     /* Set pScrn->monitor */
     pScrn->monitor = pScrn->confScreen->monitor;
