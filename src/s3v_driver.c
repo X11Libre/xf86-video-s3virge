@@ -1328,8 +1328,11 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
     /* Load XAA if needed */
     if (!ps3v->NoAccel || ps3v->hwcursor ) {
 	if (!xf86LoadSubModule(pScrn, "xaa")) {
-	    S3VFreeRec(pScrn);
-	    return FALSE;
+	    xf86DrvMsgVerb(pScrn->scrnIndex, X_INFO,
+			   "Falling back to shadowfb\n");
+	    ps3v->NoAccel = 1;
+	    ps3v->hwcursor = 0;
+	    ps3v->shadowFB = 1;
 	}
     }
 
