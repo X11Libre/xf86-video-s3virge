@@ -137,7 +137,7 @@ void S3VInitVideo(ScreenPtr pScreen)
 	    adaptors = &newAdaptor;
 	} else {
 	    newAdaptors =  /* need to free this someplace */
-		xalloc((num_adaptors + 1) * sizeof(XF86VideoAdaptorPtr*));
+		malloc((num_adaptors + 1) * sizeof(XF86VideoAdaptorPtr*));
 	    if(newAdaptors) {
 		memcpy(newAdaptors, adaptors, num_adaptors * 
 					sizeof(XF86VideoAdaptorPtr));
@@ -152,7 +152,7 @@ void S3VInitVideo(ScreenPtr pScreen)
         xf86XVScreenInit(pScreen, adaptors, num_adaptors);
 
     if(newAdaptors)
-	xfree(newAdaptors);
+	free(newAdaptors);
 }
 
 /* client libraries expect an encoding */
@@ -301,10 +301,10 @@ S3VAllocAdaptor(ScrnInfoPtr pScrn)
     if(!(adapt = xf86XVAllocateVideoAdaptorRec(pScrn)))
 	return NULL;
 
-    if(!(pPriv = xcalloc(1, sizeof(S3VPortPrivRec)  + 
+    if(!(pPriv = calloc(1, sizeof(S3VPortPrivRec)  + 
 			(sizeof(DevUnion) * S3V_MAX_PORTS)))) 
     {
-	xfree(adapt);
+	free(adapt);
 	return NULL;
     }
 

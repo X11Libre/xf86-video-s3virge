@@ -383,7 +383,7 @@ S3VFreeRec(ScrnInfoPtr pScrn)
     PVERB5("	S3VFreeRec\n");
     if (pScrn->driverPrivate == NULL)
 	return;
-    xfree(pScrn->driverPrivate);
+    free(pScrn->driverPrivate);
     pScrn->driverPrivate = NULL;
 }
 
@@ -435,7 +435,7 @@ S3VProbe(DriverPtr drv, int flags)
 				    numDevSections, drv, &usedChips);
     
     /* Free it since we don't need that list after this */
-    xfree(devSections);
+    free(devSections);
     if (numUsed <= 0)
 	return FALSE;
 
@@ -463,7 +463,7 @@ S3VProbe(DriverPtr drv, int flags)
 	    foundScreen = TRUE;
 	}
     }
-    xfree(usedChips);
+    free(usedChips);
     PVERB5("	S3VProbe end\n");
     return foundScreen;
 }
@@ -601,7 +601,7 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
     }
     
     /* Process the options */
-    if (!(ps3v->Options = xalloc(sizeof(S3VOptions))))
+    if (!(ps3v->Options = malloc(sizeof(S3VOptions))))
 	return FALSE;
     memcpy(ps3v->Options, S3VOptions, sizeof(S3VOptions));
     xf86ProcessOptions(pScrn->scrnIndex, pScrn->options, ps3v->Options);
@@ -797,7 +797,7 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
     
 #ifndef XSERVER_LIBPCIACCESS
     if (pEnt->resources) {
-	xfree(pEnt);
+	free(pEnt);
 	S3VFreeRec(pScrn);
 	return FALSE;
     }
@@ -851,7 +851,7 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
     } else {
         ps3v->ChipRev = PCI_DEV_REVISION(ps3v->PciInfo);
     }
-    xfree(pEnt);
+    free(pEnt);
     
     /*
      * This shouldn't happen because such problems should be caught in
@@ -2526,7 +2526,7 @@ S3VInternalScreenInit( int scrnIndex, ScreenPtr pScreen)
   
   if(ps3v->shadowFB) {
       ps3v->ShadowPitch = BitmapBytePad(pScrn->bitsPerPixel * width);
-      ps3v->ShadowPtr = xalloc(ps3v->ShadowPitch * height);
+      ps3v->ShadowPtr = malloc(ps3v->ShadowPitch * height);
       displayWidth = ps3v->ShadowPitch / (pScrn->bitsPerPixel >> 3);
       FBStart = ps3v->ShadowPtr;
   } else {
@@ -3310,7 +3310,7 @@ S3VCloseScreen(int scrnIndex, ScreenPtr pScreen)
   if (ps3v->AccelInfoRec)
     XAADestroyInfoRec(ps3v->AccelInfoRec);
   if (ps3v->DGAModes)
-  	xfree(ps3v->DGAModes);
+  	free(ps3v->DGAModes);
 
   pScrn->vtSema = FALSE;
 

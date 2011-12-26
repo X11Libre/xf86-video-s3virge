@@ -28,6 +28,7 @@ in this Software without prior written authorization from the XFree86 Project.
 #include "config.h"
 #endif
 
+#include <unistd.h>
 #include "s3v.h"
 
 #include "miline.h"

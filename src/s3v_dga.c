@@ -116,15 +116,15 @@ S3VDGAInit(ScreenPtr pScreen)
 	   to be rewritten to accommodate depth changes in DGA mode */
 
 	if(0 /*pScrn->displayWidth != pMode->HDisplay*/) {
-	    newmodes = xrealloc(modes, (num + 2) * sizeof(DGAModeRec));
+	    newmodes = realloc(modes, (num + 2) * sizeof(DGAModeRec));
 	    oneMore = TRUE;
 	} else {
-	    newmodes = xrealloc(modes, (num + 1) * sizeof(DGAModeRec));
+	    newmodes = realloc(modes, (num + 1) * sizeof(DGAModeRec));
 	    oneMore = FALSE;
 	}
 
 	if(!newmodes) {
-	   xfree(modes);
+	   free(modes);
 	   return FALSE;
 	}
 	modes = newmodes;
