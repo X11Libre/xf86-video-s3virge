@@ -57,8 +57,9 @@ in this Software without prior written authorization from the XFree86 Project.
  */
 
 
-	/* Most xf86 commons are already in s3v.h */
-#include	"s3v.h"
+/* Most xf86 commons are already in s3v.h */
+#include "s3v.h"
+#include "s3v_pciids.h"
 		
 
 #include "globals.h"

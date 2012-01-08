@@ -40,8 +40,9 @@ in this Software without prior written authorization from the XFree86 Project.
 #include "config.h"
 #endif
 
-	/* Most xf86 commons are already in s3v.h */
-#include	"s3v.h"
+/* Most xf86 commons are already in s3v.h */
+#include "s3v.h"
+#include "s3v_pciids.h"
 
 #if 0
 #define OFF_DELAY 	250  /* milliseconds */
