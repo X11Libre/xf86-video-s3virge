@@ -279,7 +279,9 @@ typedef struct tagS3VRec {
   XAAInfoRecPtr 	AccelInfoRec;
   /* PCI info vars.	*/
   pciVideoPtr 	PciInfo;
+#ifndef XSERVER_LIBPCIACCESS
   PCITAG 		PciTag;
+#endif
   /* Chip info, set using PCI	*/
   /* above.			*/
   int			Chipset;
