@@ -82,7 +82,7 @@ S3VAccelInit(ScreenPtr pScreen)
 {
 #ifdef HAVE_XAA_H
     XAAInfoRecPtr infoPtr;
-    ScrnInfoPtr pScrn = xf86Screens[pScreen->myNum];
+    ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
     S3VPtr ps3v = S3VPTR(pScrn);
     BoxRec AvailFBArea;
 

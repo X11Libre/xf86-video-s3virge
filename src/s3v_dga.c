@@ -101,7 +101,7 @@ DGAFunctionRec S3V_DGAFuncs = {
 Bool
 S3VDGAInit(ScreenPtr pScreen)
 {   
-   ScrnInfoPtr pScrn = xf86Screens[pScreen->myNum];
+   ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
    S3VPtr ps3v = S3VPTR(pScrn);
    DGAModePtr modes = NULL, newmodes = NULL, currentMode;
    DisplayModePtr pMode, firstMode;
@@ -245,7 +245,7 @@ S3V_SetMode(
 	
 	pScrn->displayWidth = OldDisplayWidth[index];
 	
-        S3VSwitchMode(index, pScrn->currentMode, 0);
+        S3VSwitchMode(SWITCH_MODE_ARGS(pScrn, pScrn->currentMode));
 	ps3v->DGAactive = FALSE;
    } else {
 	if(!ps3v->DGAactive) {  /* save the old parameters */
@@ -257,7 +257,7 @@ S3V_SetMode(
 	pScrn->displayWidth = pMode->bytesPerScanline / 
 			      (pMode->bitsPerPixel >> 3);
 
-        S3VSwitchMode(index, pMode->mode, 0);
+        S3VSwitchMode(SWITCH_MODE_ARGS(pScrn, pMode->mode));
    }
    
    return TRUE;
@@ -282,7 +282,7 @@ S3V_SetViewport(
 ){
    S3VPtr ps3v = S3VPTR(pScrn);
 
-   S3VAdjustFrame(pScrn->pScreen->myNum, x, y, flags);
+   S3VAdjustFrame(ADJUST_FRAME_ARGS(pScrn, x, y));
    ps3v->DGAViewportStatus = 0;  /* MGAAdjustFrame loops until finished */
 }
 
