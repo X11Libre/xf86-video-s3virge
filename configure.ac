@@ -1,4 +1,4 @@
-#  Copyright 2005 Adam Jackson.
+\#  Copyright 2005 Adam Jackson.
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a
 #  copy of this software and associated documentation files (the "Software"),
@@ -80,6 +80,24 @@ if test "x$XSERVER_LIBPCIACCESS" = xyes; then
     XORG_CFLAGS="$XORG_CFLAGS $PCIACCESS_CFLAGS"
 fi
 AM_CONDITIONAL(XSERVER_LIBPCIACCESS, test "x$XSERVER_LIBPCIACCESS" = xyes)
+
+AC_ARG_ENABLE(xaa,
+              AS_HELP_STRING([--enable-xaa],
+                             [Enable legacy X Acceleration Architecture (XAA) [default=auto]]),
+              [XAA="$enableval"],
+              [XAA=auto])
+if test "x$XAA" != xno; then
+        save_CFLAGS=$CFLAGS
+        save_CPPFLAGS=$CPPFLAGS
+        CFLAGS=$XORG_CFLAGS
+        CPPFLAGS="$XORG_CFLAGS"
+        AC_CHECK_HEADERS([xaa.h], XAA=yes, XAA=no)
+        CFLAGS=$save_CFLAGS
+        CPPFLAGS=$save_CPPFLAGS
+fi
+AC_MSG_CHECKING([whether to include XAA support])
+AM_CONDITIONAL(XAA, test "x$XAA" = xyes)
+AC_MSG_RESULT([$XAA])
 
 AC_SUBST([moduledir])
 

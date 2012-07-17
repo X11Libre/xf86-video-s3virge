@@ -3308,8 +3308,10 @@ S3VCloseScreen(int scrnIndex, ScreenPtr pScreen)
       S3VUnmapMem(pScrn);
   }
 
+#ifdef HAVE_XAA_H
   if (ps3v->AccelInfoRec)
     XAADestroyInfoRec(ps3v->AccelInfoRec);
+#endif
   if (ps3v->DGAModes)
   	free(ps3v->DGAModes);
 
