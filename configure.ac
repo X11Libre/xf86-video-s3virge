@@ -23,7 +23,7 @@
 # Initialize Autoconf
 AC_PREREQ([2.60])
 AC_INIT([xf86-video-s3virge],
-        [1.10.7],
+        [1.11.0],
         [https://gitlab.freedesktop.org/xorg/driver/xf86-video-s3virge/issues],
         [xf86-video-s3virge])
 AC_CONFIG_SRCDIR([Makefile.am])
