@@ -110,7 +110,7 @@ static Bool S3VModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode);
 static Bool S3VCloseScreen(CLOSE_SCREEN_ARGS_DECL);
 static Bool S3VSaveScreen(ScreenPtr pScreen, int mode);
 static void S3VInitSTREAMS(ScrnInfoPtr pScrn, unsigned int *streams, DisplayModePtr mode);
-static void S3VLoadPalette(ScrnInfoPtr pScrn, int numColors, int *indicies, LOCO *colors, VisualPtr pVisual);
+static void S3VLoadPalette(ScrnInfoPtr pScrn, int numColors, int *indices, LOCO *colors, VisualPtr pVisual);
 
 static void S3VDisplayPowerManagementSet(ScrnInfoPtr pScrn,
 					 int PowerManagementMode,
@@ -140,7 +140,7 @@ static int pix24bpp = 0;
 /* 
  * This contains the functions needed by the server after loading the
  * driver module.  It must be supplied, and gets added the driver list by
- * the Module Setup funtion in the dynamic case.  In the static case a
+ * the Module Setup function in the dynamic case.  In the static case a
  * reference to this is compiled in, and this requires that the name of
  * this DriverRec be an upper-case version of the driver name.
  */
@@ -1774,7 +1774,7 @@ S3VWriteMode (ScrnInfoPtr pScrn, vgaRegPtr vgaSavePtr, S3VRegPtr restore)
 
   vgaHWProtect(pScrn, TRUE);
    
-   /* Are we going to reenable STREAMS in this new mode? */
+   /* Are we going to re-enable STREAMS in this new mode? */
    ps3v->STREAMSRunning = restore->CR67 & 0x0c; 
 
    /* First reset GE to make sure nothing is going on */
@@ -2112,7 +2112,7 @@ S3VRestoreSTREAMS(ScrnInfoPtr pScrn, unsigned int *streams)
 
 
 /* And this function disables the STREAMS processor as per databook.
- * This is usefull before we do a mode change 
+ * This is useful before we do a mode change
  */
 
 static void
@@ -2155,7 +2155,7 @@ unsigned char tmp;
 		/* S3_NEWMMIO_REGSIZE = 0x1 0000  ( 64KB )		*/
 		/* S3V_MMIO_REGSIZE = 0x8000 ( 32KB ) - above includes	*/
 		/* the image transfer area, so this one is used instead.*/
-		/* ps3v->IOBase is assinged the virtual address returned*/
+		/* ps3v->IOBase is assigned the virtual address returned*/
 		/* from MapPciMem, it is the address to base all 	*/
 		/* register access. (It is a pointer.)  		*/
 		/* hwp->MemBase is a CARD32, containing the register	*/
@@ -3485,7 +3485,7 @@ S3VSwitchMode(SWITCH_MODE_ARGS_DECL)
 void S3VLoadPalette(
     ScrnInfoPtr pScrn, 
     int numColors, 
-    int *indicies,
+    int *indices,
     LOCO *colors,
     VisualPtr pVisual
 ){
@@ -3493,7 +3493,7 @@ void S3VLoadPalette(
     int i, index;
 
     for(i = 0; i < numColors; i++) {
-	index = indicies[i];
+	index = indices[i];
         VGAOUT8(0x3c8, index);
         VGAOUT8(0x3c9, colors[index].red);
         VGAOUT8(0x3c9, colors[index].green);
@@ -3533,7 +3533,7 @@ S3VEnableMmio(ScrnInfoPtr pScrn)
   vgaHWSetStdFuncs(hwp);
   /*
    * any access to the legacy VGA ports is done here.
-   * If legacy VGA is inaccessable the MMIO base _has_
+   * If legacy VGA is inaccessible the MMIO base _has_
    * to be set correctly already and MMIO _has_ to be
    * enabled.
    */

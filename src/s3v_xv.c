@@ -483,7 +483,7 @@ S3VDisplayVideoOverlay(
     int offset,
     short width, short height,
     int pitch, 
-    /* x,y src co-ordinates */
+    /* x,y src coordinates */
     int x1, int y1, int x2, int y2,
     /* dst in BoxPtr format */
     BoxPtr dstBox,
