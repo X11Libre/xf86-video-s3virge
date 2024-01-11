@@ -267,14 +267,14 @@ in this Software without prior written authorization from the XFree86 Project.
              (loop++<MAXLOOP)); \
     else \
        while (((IN_SUBSYS_STAT() & 0x3f00) != 0x3000) && (loop++<MAXLOOP)); \
-       if (loop >= MAXLOOP) S3VGEReset(pScrn,1,__LINE__,__FILE__); \
+    if (loop >= MAXLOOP) S3VGEReset(pScrn,1,__LINE__,__FILE__);         \
   } while (0)
 
 /* Wait until GP is idle */
 #define WaitIdle() \
   do { int loop=0; mem_barrier(); \
        while ((!(IN_SUBSYS_STAT() & 0x2000)) && (loop++<MAXLOOP)); \
-         if (loop >= MAXLOOP) S3VGEReset(pScrn,1,__LINE__,__FILE__); \
+       if (loop >= MAXLOOP) S3VGEReset(pScrn,1,__LINE__,__FILE__); \
   } while (0)
 
 
