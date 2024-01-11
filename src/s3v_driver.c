@@ -2574,7 +2574,6 @@ S3VModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode)
   S3VPtr ps3v = S3VPTR(pScrn);
   int width, dclk;
   int i, j;
-  unsigned char tmp = 0;
   
   		      		/* Store values to current mode register structs */
   S3VRegPtr new = &ps3v->ModeReg;
@@ -2626,24 +2625,26 @@ S3VModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode)
    /* Start with MMIO, linear addr. regs */
 
    VGAOUT8(vgaCRIndex, 0x3a);
-   tmp = VGAIN8(vgaCRReg);
-   if( S3_ViRGE_GX2_SERIES(ps3v->Chipset) 
-       /* MXTESTME */ || S3_ViRGE_MX_SERIES(ps3v->Chipset) )
-     {
-     if(ps3v->pci_burst)
-       /*new->CR3A = (tmp & 0x38) | 0x10; / ENH 256, PCI burst */
-       /* Don't clear reserved bits... */
-        new->CR3A = (tmp & 0x7f) | 0x10; /* ENH 256, PCI burst */
-     else 
-        new->CR3A = tmp | 0x90;      /* ENH 256, no PCI burst! */
-     }
-   else
-     {
-     if(ps3v->pci_burst)
-        new->CR3A = (tmp & 0x7f) | 0x15; /* ENH 256, PCI burst */
-     else 
-        new->CR3A = tmp | 0x95;      /* ENH 256, no PCI burst! */
-     }
+   {
+       unsigned char tmp = VGAIN8(vgaCRReg);
+       if (S3_ViRGE_GX2_SERIES(ps3v->Chipset) 
+           /* MXTESTME */ || S3_ViRGE_MX_SERIES(ps3v->Chipset) )
+       {
+           if (ps3v->pci_burst)
+               /*new->CR3A = (tmp & 0x38) | 0x10; / ENH 256, PCI burst */
+               /* Don't clear reserved bits... */
+               new->CR3A = (tmp & 0x7f) | 0x10; /* ENH 256, PCI burst */
+           else 
+               new->CR3A = tmp | 0x90;      /* ENH 256, no PCI burst! */
+       }
+       else
+       {
+           if (ps3v->pci_burst)
+               new->CR3A = (tmp & 0x7f) | 0x15; /* ENH 256, PCI burst */
+           else 
+               new->CR3A = tmp | 0x95;      /* ENH 256, no PCI burst! */
+       }
+   }
   
 
    VGAOUT8(vgaCRIndex, 0x55);
