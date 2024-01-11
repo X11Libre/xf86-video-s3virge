@@ -74,8 +74,8 @@ static void S3VPolylinesThinSolidWrapper(DrawablePtr, GCPtr, int, int,
 				DDXPointPtr);
 static void S3VPolySegmentThinSolidWrapper(DrawablePtr, GCPtr, int, xSegment*);
 #endif
-static void S3VNopAllCmdSets(ScrnInfoPtr pScrn);
 #endif
+static void S3VNopAllCmdSets(ScrnInfoPtr pScrn);
 
 Bool 
 S3VAccelInit(ScreenPtr pScreen)
@@ -244,7 +244,7 @@ S3VAccelInit32(ScreenPtr pScreen)
    return FALSE; 
 }
 
-void
+static void
 S3VNopAllCmdSets(ScrnInfoPtr pScrn)
 {
   int i;
