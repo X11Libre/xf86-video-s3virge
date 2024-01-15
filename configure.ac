@@ -97,6 +97,11 @@ AC_MSG_CHECKING([whether to include XAA support])
 AM_CONDITIONAL(XAA, test "x$XAA" = xyes)
 AC_MSG_RESULT([$XAA])
 
+# Checks for library functions
+# We don't use strlcat, strlcpy, or timingsafe_memcmp, but check to quiet
+# -Wredundant-decls warning from xorg/os.h which will otherwise redefine them.
+AC_CHECK_FUNCS([strlcat strlcpy timingsafe_memcmp])
+
 AC_SUBST([moduledir])
 
 DRIVER_NAME=s3virge
