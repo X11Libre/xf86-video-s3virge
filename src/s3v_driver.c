@@ -371,7 +371,7 @@ S3VGetRec(ScrnInfoPtr pScrn)
     if (pScrn->driverPrivate != NULL)
 	return TRUE;
 
-    pScrn->driverPrivate = xnfcalloc(sizeof(S3VRec), 1);
+    pScrn->driverPrivate = XNFcallocarray(sizeof(S3VRec), 1);
     /* Initialise it here when needed (or possible) */
 
     return TRUE;
@@ -1220,7 +1220,7 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
      * Setup the ClockRanges, which describe what clock ranges are available,
      * and what sort of modes they can be used for.
      */
-    clockRanges = xnfcalloc(sizeof(ClockRange), 1);
+    clockRanges = XNFcallocarray(sizeof(ClockRange), 1);
     clockRanges->next = NULL;
     clockRanges->minClock = 10000;
     if (ps3v->Chipset == S3_ViRGE_VX )
