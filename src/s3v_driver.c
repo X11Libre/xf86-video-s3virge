@@ -3507,10 +3507,6 @@ S3VEnableMmio(ScrnInfoPtr pScrn)
   hwp = VGAHWPTR(pScrn);
   ps3v = S3VPTR(pScrn);
 
-#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 12
-  PIOOffset = hwp->PIOOffset;
-#endif
-  
   /*
    * enable chipset (seen on uninitialized secondary cards)
    * might not be needed once we use the VGA softbooter
@@ -3575,9 +3571,6 @@ S3VDisableMmio(ScrnInfoPtr pScrn)
   ps3v = S3VPTR(pScrn);
 
   vgaCRIndex = hwp->IOBase + 4;
-#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 12
-  vgaCRIndex += hwp->PIOOffset;
-#endif
   vgaCRReg = vgaCRIndex + 1;
   outb(vgaCRIndex, 0x53);
 				/* Restore register's original state */
