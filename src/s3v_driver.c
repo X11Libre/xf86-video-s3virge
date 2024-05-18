@@ -31,12 +31,6 @@ in this Software without prior written authorization from the XFree86 Project.
 #include <unistd.h>
 
 #include "xf86.h"
-#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 6
-#include "xf86Resources.h"
-/* Needed by Resources Access Control (RAC) */
-#include "xf86RAC.h"
-#endif
-
 #include "xf86DDC.h"
 #include "vbe.h"
 
@@ -1311,15 +1305,12 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
 	return FALSE;
     }	       
 
-    /* Load XAA if needed */
     if (!ps3v->NoAccel || ps3v->hwcursor ) {
-	if (!xf86LoadSubModule(pScrn, "xaa")) {
-	    xf86DrvMsgVerb(pScrn->scrnIndex, X_INFO, VERBLEV,
-			   "Falling back to shadowfb\n");
-	    ps3v->NoAccel = 1;
-	    ps3v->hwcursor = 0;
-	    ps3v->shadowFB = 1;
-	}
+	xf86DrvMsgVerb(pScrn->scrnIndex, X_INFO, VERBLEV,
+		       "Falling back to shadowfb\n");
+	ps3v->NoAccel = 1;
+	ps3v->hwcursor = 0;
+	ps3v->shadowFB = 1;
     }
 
     /* Load ramdac if needed */
@@ -3298,10 +3289,6 @@ S3VCloseScreen(CLOSE_SCREEN_ARGS_DECL)
       S3VUnmapMem(pScrn);
   }
 
-#ifdef HAVE_XAA_H
-  if (ps3v->AccelInfoRec)
-    XAADestroyInfoRec(ps3v->AccelInfoRec);
-#endif
   if (ps3v->DGAModes)
   	free(ps3v->DGAModes);
 

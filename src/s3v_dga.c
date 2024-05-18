@@ -72,10 +72,6 @@ static Bool S3V_OpenFramebuffer(ScrnInfoPtr, char **, unsigned char **,
 static Bool S3V_SetMode(ScrnInfoPtr, DGAModePtr);
 static int  S3V_GetViewport(ScrnInfoPtr);
 static void S3V_SetViewport(ScrnInfoPtr, int, int, int);
-#ifdef HAVE_XAA_H
-static void S3V_FillRect(ScrnInfoPtr, int, int, int, int, unsigned long);
-static void S3V_BlitRect(ScrnInfoPtr, int, int, int, int, int, int);
-#endif
 /* dummy... */
 
 
@@ -87,12 +83,7 @@ DGAFunctionRec S3V_DGAFuncs = {
    S3V_SetViewport,
    S3V_GetViewport,
    S3VAccelSync,
-#ifdef HAVE_XAA_H
-   S3V_FillRect,
-   S3V_BlitRect,
-#else
    NULL, NULL,
-#endif
    NULL
    /* dummy... MGA_BlitTransRect */
 };
@@ -139,10 +130,6 @@ SECOND_PASS:
 
 	currentMode->mode = pMode;
 	currentMode->flags = DGA_CONCURRENT_ACCESS | DGA_PIXMAP_AVAILABLE;
-#ifdef HAVE_XAA_H
-	if(!ps3v->NoAccel)
-	   currentMode->flags |= DGA_FILL_RECT | DGA_BLIT_RECT;
-#endif
 	if(pMode->Flags & V_DBLSCAN)
 	   currentMode->flags |= DGA_DOUBLESCAN;
 	if(pMode->Flags & V_INTERLACE)
@@ -286,43 +273,6 @@ S3V_SetViewport(
    ps3v->DGAViewportStatus = 0;  /* MGAAdjustFrame loops until finished */
 }
 
-#ifdef HAVE_XAA_H
-static void 
-S3V_FillRect (
-   ScrnInfoPtr pScrn, 
-   int x, int y, int w, int h, 
-   unsigned long color
-){
-    S3VPtr ps3v = S3VPTR(pScrn);
-
-    if(ps3v->AccelInfoRec) {
-	(*ps3v->AccelInfoRec->SetupForSolidFill)(pScrn, color, GXcopy, ~0);
-	(*ps3v->AccelInfoRec->SubsequentSolidFillRect)(pScrn, x, y, w, h);
-	SET_SYNC_FLAG(ps3v->AccelInfoRec);
-    }
-}
-
-static void 
-S3V_BlitRect(
-   ScrnInfoPtr pScrn, 
-   int srcx, int srcy, 
-   int w, int h, 
-   int dstx, int dsty
-){
-    S3VPtr ps3v = S3VPTR(pScrn);
-
-    if(ps3v->AccelInfoRec) {
-	int xdir = ((srcx < dstx) && (srcy == dsty)) ? -1 : 1;
-	int ydir = (srcy < dsty) ? -1 : 1;
-
-	(*ps3v->AccelInfoRec->SetupForScreenToScreenCopy)(
-		pScrn, xdir, ydir, GXcopy, ~0, -1);
-	(*ps3v->AccelInfoRec->SubsequentScreenToScreenCopy)(
-		pScrn, srcx, srcy, dstx, dsty, w, h);
-	SET_SYNC_FLAG(ps3v->AccelInfoRec);
-    }
-}
-#endif
 
 
 static Bool 

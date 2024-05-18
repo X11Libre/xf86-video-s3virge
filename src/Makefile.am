@@ -42,6 +42,5 @@ s3virge_drv_la_SOURCES = \
          s3v_macros.h \
 	 s3v_pciids.h \
 	 s3v_pcirename.h \
-         s3v_rop.h \
          s3v_shadow.c \
          s3v_xv.c

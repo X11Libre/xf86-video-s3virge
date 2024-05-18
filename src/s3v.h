@@ -59,11 +59,6 @@ in this Software without prior written authorization from the XFree86 Project.
 
 #include "fb.h"
 
-/* Drivers using the XAA interface ... */
-#ifdef HAVE_XAA_H
-#include "xaa.h"
-#include "xaalocal.h"
-#endif
 #include "xf86fbman.h"
 #include "xf86cmap.h"
 #include "xf86i2c.h"
@@ -195,9 +190,6 @@ typedef struct tagS3VRec {
   /* Compatibility variables */
   int 		vgaCRIndex, vgaCRReg;
   int 		Width, Bpp,Bpl, ScissB;   
-  /* XAA */
-  unsigned 		PlaneMask;
-  int 		bltbug_width1, bltbug_width2;
   /* In units as noted, set in PreInit */
   int			videoRambytes;
   int			videoRamKbytes;
@@ -280,10 +272,6 @@ typedef struct tagS3VRec {
   /* Pointer used to save wrapped */
   /* CloseScreen function.	*/
   CloseScreenProcPtr	CloseScreen;
-#ifdef HAVE_XAA_H
-  /* XAA info Rec 	*/
-  XAAInfoRecPtr 	AccelInfoRec;
-#endif
   /* PCI info vars.	*/
   pciVideoPtr 	PciInfo;
 #ifndef XSERVER_LIBPCIACCESS
