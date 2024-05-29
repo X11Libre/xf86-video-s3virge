@@ -85,23 +85,23 @@ static void S3VIdentify(int flags);
 static Bool S3VProbe(DriverPtr drv, int flags);
 static Bool S3VPreInit(ScrnInfoPtr pScrn, int flags);
 
-static Bool S3VEnterVT(VT_FUNC_ARGS_DECL);
-static void S3VLeaveVT(VT_FUNC_ARGS_DECL);
+static Bool S3VEnterVT(ScrnInfoPtr pScrn);
+static void S3VLeaveVT(ScrnInfoPtr pScrn);
 static void S3VSave (ScrnInfoPtr pScrn);
 static void S3VWriteMode (ScrnInfoPtr pScrn, vgaRegPtr, S3VRegPtr);
 
 static void S3VSaveSTREAMS(ScrnInfoPtr pScrn, unsigned int *streams);
 static void S3VRestoreSTREAMS(ScrnInfoPtr pScrn, unsigned int *streams);
 static void S3VDisableSTREAMS(ScrnInfoPtr pScrn);
-static Bool S3VScreenInit(SCREEN_INIT_ARGS_DECL);
+static Bool S3VScreenInit(ScreenPtr pScreen, int argc, char **argv);
 static int S3VInternalScreenInit(ScrnInfoPtr pScrn, ScreenPtr pScreen);
 static void S3VPrintRegs(ScrnInfoPtr);
-static ModeStatus S3VValidMode(SCRN_ARG_TYPE arg, DisplayModePtr mode, Bool verbose, int flags);
+static ModeStatus S3VValidMode(ScrnInfoPtr pScrn, DisplayModePtr mode, Bool verbose, int flags);
 
 static Bool S3VMapMem(ScrnInfoPtr pScrn);
 static void S3VUnmapMem(ScrnInfoPtr pScrn);
 static Bool S3VModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode);
-static Bool S3VCloseScreen(CLOSE_SCREEN_ARGS_DECL);
+static Bool S3VCloseScreen(ScreenPtr pScreen);
 static Bool S3VSaveScreen(ScreenPtr pScreen, int mode);
 static void S3VInitSTREAMS(ScrnInfoPtr pScrn, unsigned int *streams, DisplayModePtr mode);
 static void S3VLoadPalette(ScrnInfoPtr pScrn, int numColors, int *indices, LOCO *colors, VisualPtr pVisual);
@@ -1362,14 +1362,9 @@ S3VPreInit(ScrnInfoPtr pScrn, int flags)
 
 /* Mandatory */
 static Bool
-S3VEnterVT(VT_FUNC_ARGS_DECL)
+S3VEnterVT(ScrnInfoPtr pScrn)
 {
-    SCRN_INFO_PTR(arg);
-/*      ScreenPtr pScreen = xf86Screens[scrnIndex]->pScreen; */
-    /*vgaHWPtr hwp = VGAHWPTR(pScrn);*/
-
     PVERB5("	S3VEnterVT\n");
-    /*vgaHWUnlockMMIO(hwp);*/
     				/* Enable MMIO and map memory */
 #ifdef unmap_always
     S3VMapMem(pScrn);
@@ -1391,9 +1386,8 @@ S3VEnterVT(VT_FUNC_ARGS_DECL)
 
 /* Mandatory */
 static void
-S3VLeaveVT(VT_FUNC_ARGS_DECL)
+S3VLeaveVT(ScrnInfoPtr pScrn)
 {
-    SCRN_INFO_PTR(arg);
     vgaHWPtr hwp = VGAHWPTR(pScrn);
     S3VPtr ps3v = S3VPTR(pScrn);
     vgaRegPtr vgaSavePtr = &hwp->SavedReg;
@@ -2295,7 +2289,7 @@ S3VUnmapMem(ScrnInfoPtr pScrn)
 /* This gets called at the start of each server generation */
 
 static Bool
-S3VScreenInit(SCREEN_INIT_ARGS_DECL)
+S3VScreenInit(ScreenPtr pScreen, int argc, char **argv)
 {
   ScrnInfoPtr pScrn;
   S3VPtr ps3v;
@@ -2537,10 +2531,8 @@ S3VInternalScreenInit(ScrnInfoPtr pScrn, ScreenPtr pScreen)
 /* Checks if a mode is suitable for the selected chipset. */
 
 static ModeStatus
-S3VValidMode(SCRN_ARG_TYPE arg, DisplayModePtr mode, Bool verbose, int flags)
+S3VValidMode(ScrnInfoPtr pScrn, DisplayModePtr mode, Bool verbose, int flags)
 {
-   SCRN_INFO_PTR(arg);
-
     if ((pScrn->bitsPerPixel + 7)/8 * mode->HDisplay > 4095)
 	return MODE_VIRTUAL_X;
 
@@ -3257,7 +3249,7 @@ S3VModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode)
 					/* needed, etc.		    	    */
    S3VWriteMode( pScrn, vganew, new );
    					/* Adjust the viewport */
-   S3VAdjustFrame(ADJUST_FRAME_ARGS(pScrn, pScrn->frameX0, pScrn->frameY0));
+   S3VAdjustFrame(pScrn, pScrn->frameX0, pScrn->frameY0);
 
    return TRUE;
 }
@@ -3272,7 +3264,7 @@ S3VModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode)
 
 /* Mandatory */
 static Bool
-S3VCloseScreen(CLOSE_SCREEN_ARGS_DECL)
+S3VCloseScreen(ScreenPtr pScreen)
 {
   ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
   vgaHWPtr hwp = VGAHWPTR(pScrn);
@@ -3296,7 +3288,7 @@ S3VCloseScreen(CLOSE_SCREEN_ARGS_DECL)
 
   pScreen->CloseScreen = ps3v->CloseScreen;
 
-  return (*pScreen->CloseScreen)(CLOSE_SCREEN_ARGS);
+  return (*pScreen->CloseScreen)(pScreen);
 }
 
 
@@ -3410,9 +3402,8 @@ S3VInitSTREAMS(ScrnInfoPtr pScrn, unsigned int *streams, DisplayModePtr mode)
  */
 
 void
-S3VAdjustFrame(ADJUST_FRAME_ARGS_DECL)
+S3VAdjustFrame(ScrnInfoPtr pScrn, int x, int y)
 {
-   SCRN_INFO_PTR(arg);
    vgaHWPtr hwp = VGAHWPTR(pScrn);
    S3VPtr ps3v = S3VPTR(pScrn);
    int Base;
@@ -3460,9 +3451,8 @@ S3VAdjustFrame(ADJUST_FRAME_ARGS_DECL)
 
 /* Usually mandatory */
 Bool
-S3VSwitchMode(SWITCH_MODE_ARGS_DECL)
+S3VSwitchMode(ScrnInfoPtr pScrn, DisplayModePtr mode)
 {
-    SCRN_INFO_PTR(arg);
     return S3VModeInit(pScrn, mode);
 }
 
@@ -3755,8 +3745,7 @@ S3Vddc1(ScrnInfoPtr pScrn)
     OUTREG(DDC_REG,(tmp | 0x12));
     
     if ((pMon = xf86PrintEDID(
-		xf86DoEDID_DDC1(XF86_SCRN_ARG(pScrn), S3Vddc1SetSpeed,
-	                S3Vddc1Read))) != NULL)
+		xf86DoEDID_DDC1(pScrn, S3Vddc1SetSpeed, S3Vddc1Read))) != NULL)
 	success = TRUE;
     xf86SetDDCproperties(pScrn,pMon);
 
@@ -3775,7 +3764,7 @@ S3Vddc2(ScrnInfoPtr pScrn)
 	    CARD32 tmp = (INREG(DDC_REG));
 	    OUTREG(DDC_REG,(tmp | 0x13));
 	    xf86SetDDCproperties(pScrn,xf86PrintEDID(
-			     xf86DoEDID_DDC2(XF86_SCRN_ARG(pScrn),ps3v->I2C)));
+			     xf86DoEDID_DDC2(pScrn,ps3v->I2C)));
 	    OUTREG(DDC_REG,tmp);
 	    return TRUE;
 	}

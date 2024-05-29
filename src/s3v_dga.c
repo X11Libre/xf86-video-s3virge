@@ -232,7 +232,7 @@ S3V_SetMode(
 	
 	pScrn->displayWidth = OldDisplayWidth[index];
 	
-        S3VSwitchMode(SWITCH_MODE_ARGS(pScrn, pScrn->currentMode));
+        S3VSwitchMode(pScrn, pScrn->currentMode);
 	ps3v->DGAactive = FALSE;
    } else {
 	if(!ps3v->DGAactive) {  /* save the old parameters */
@@ -244,7 +244,7 @@ S3V_SetMode(
 	pScrn->displayWidth = pMode->bytesPerScanline / 
 			      (pMode->bitsPerPixel >> 3);
 
-        S3VSwitchMode(SWITCH_MODE_ARGS(pScrn, pMode->mode));
+        S3VSwitchMode(pScrn, pMode->mode);
    }
    
    return TRUE;
@@ -269,7 +269,7 @@ S3V_SetViewport(
 ){
    S3VPtr ps3v = S3VPTR(pScrn);
 
-   S3VAdjustFrame(ADJUST_FRAME_ARGS(pScrn, x, y));
+   S3VAdjustFrame(pScrn, x, y);
    ps3v->DGAViewportStatus = 0;  /* MGAAdjustFrame loops until finished */
 }
 
