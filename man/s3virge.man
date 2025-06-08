@@ -1,6 +1,6 @@
 .\" shorthand for double quote that works everywhere.
 .ds q \N'34'
-.TH S3VIRGE __drivermansuffix__ 2004-04-23 __vendorversion__
+.TH S3VIRGE __drivermansuffix__ 2008-03-24 __vendorversion__
 .SH NAME
 s3virge \- S3 ViRGE video driver for Xorg
 .SH SYNOPSIS
@@ -168,13 +168,6 @@ but you see graphic corruption on the screen.
 Using it decreases performance, as it uses software emulation for drawing
 operations the video driver can accelerate with hardware.
 Default: acceleration is enabled.
-.TP
-.B "Option \*qUseFB\*q"
-There are two framebuffer rendering methods:  fb and cfb.
-Both are available in the driver.
-fb is the newer and default method.
-To switch back to cfb use this option with no, off or other negative parameter.
-Default: on.
 .TP
 .BR "Option \*qfifo_aggressive " | " fifo_moderate " | " fifo_conservative\*q"
 alter the settings for the threshold at which the pixel FIFO
