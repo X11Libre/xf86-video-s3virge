@@ -259,7 +259,6 @@ typedef struct tagS3VRec {
   Bool		lcd_center;
   /* hardware cursor enabled */
   Bool		hwcursor;
-  Bool          UseFB;
   Bool          mx_cr3a_fix;
   Bool          XVideo;
   /* ViRGE options -end- */
