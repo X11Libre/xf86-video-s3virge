@@ -53,8 +53,8 @@ in this Software without prior written authorization from the XFree86 Project.
  */
 
 /* Taken from accel/s3_virge code */
-/* 23/03/97 S. Marineau: fixed bug with first Doubleword Offset macros 
- * and added macro CommandWaitIdle to wait for the command FIFO to empty 
+/* 23/03/97 S. Marineau: fixed bug with first Doubleword Offset macros
+ * and added macro CommandWaitIdle to wait for the command FIFO to empty
  */
 
 
@@ -289,14 +289,14 @@ in this Software without prior written authorization from the XFree86 Project.
           if (loop >= MAXLOOP) S3VGEReset(pScrn,1,__LINE__,__FILE__); \
 	} while (0)
 
-/* Wait until a DMA transfer is done */ 
+/* Wait until a DMA transfer is done */
 #define WaitDMAEmpty() \
   do { int loop=0; mem_barrier(); \
        while  (((((mmtr)s3vMmioMem)->dma_regs.regs.cmd.write_pointer) != (((mmtr)s3vMmioMem)->dma_regs.regs.cmd.read_pointer)) && (loop++<MAXLOOP)); \
        if (loop >= MAXLOOP) S3VGEReset(pScrn,1,__LINE__,__FILE__); \
   } while(0)
 
-      
+
 
 
 

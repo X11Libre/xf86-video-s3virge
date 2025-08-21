@@ -30,7 +30,7 @@ DPMS testing (display DPMS status, disable MX LCD panel), DGA testing.
 
 11/11/01 KJB
 Ver 1.8.1
-ViRGE MX (& GX2) fix to CR63 for problems with modes < 1024x768 from 
+ViRGE MX (& GX2) fix to CR63 for problems with modes < 1024x768 from
 max <sunmax@libero.it>. Submitted for 4.2.0.
 
 11/5/01 KJB
@@ -104,7 +104,7 @@ but not working yet.
 10/29/00 KJB
 Much work on GX2, now SWCursor locks up but HWCursor is stable, go figure.
 Loading Netscape a couple times with the mail window was enough to lock it
-up twice in a row.  Server was locked but not a box (PCI) lock.  Also, 
+up twice in a row.  Server was locked but not a box (PCI) lock.  Also,
 vertical barring still occurred a couple times, so HW cursor wasn't causing
 that.  Try blt_bug flag again for lock up case.  And attach to debug server
 and bt...  Sleep now...
@@ -137,7 +137,7 @@ never recover.
 
 6/23/00 KJB
 Ver 1.2.0 - Fix console corruption on GX2 caused by reserved bit use in CR3A.
-Fix GX2 noise on screen in hi-res depth 24 by increasing FIFO fill threshold. 
+Fix GX2 noise on screen in hi-res depth 24 by increasing FIFO fill threshold.
 
 6/12/00 KJB
 Ver 1.1.0 - Add Init for SilkenMouse, add xf86SetBackingStore call, move
@@ -235,7 +235,7 @@ Trap fills do not support transparency, so that needs to be exported to XAA.
 
 
 10/31/98 KJB
-Working depth 8, discolored dep 16 but runs, dep 24 screen goes black, 
+Working depth 8, discolored dep 16 but runs, dep 24 screen goes black,
 C-A-Bkspc restores text console.  At 3.9Nk tree level, module would not
 load in Loader server.  why?  Static server tested.
 
@@ -303,7 +303,7 @@ Notes:
 
 /config/cf/xfree86.cf
 
-have to add s3v to XF86CardDrivers for imake to make the 
+have to add s3v to XF86CardDrivers for imake to make the
 drivers/s3v Makefile.
 
 To remake makefiles, after editing Imakefile, go to dir above drivers/s3v

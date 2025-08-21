@@ -66,12 +66,12 @@ static int  S3VGetPortAttributeOverlay(ScrnInfoPtr, Atom ,INT32 *, pointer);
 
 
 static void S3VStopVideo(ScrnInfoPtr, pointer, Bool);
-static void S3VQueryBestSize(ScrnInfoPtr, Bool, short, short, short, short, 
+static void S3VQueryBestSize(ScrnInfoPtr, Bool, short, short, short, short,
 			unsigned int *, unsigned int *, pointer);
-static int  S3VPutImage(ScrnInfoPtr, short, short, short, short, short, 
-			short, short, short, int, unsigned char*, short, 
+static int  S3VPutImage(ScrnInfoPtr, short, short, short, short, short,
+			short, short, short, int, unsigned char*, short,
 			short, Bool, RegionPtr, pointer, DrawablePtr);
-static int  S3VQueryImageAttributes(ScrnInfoPtr, int, unsigned short *, 
+static int  S3VQueryImageAttributes(ScrnInfoPtr, int, unsigned short *,
 			unsigned short *,  int *, int *);
 
 
@@ -89,12 +89,12 @@ int S3VQueryXvCapable(ScrnInfoPtr pScrn)
   S3VPtr ps3v = S3VPTR(pScrn);
 
   if(
-     ((pScrn->bitsPerPixel == 24) || 
+     ((pScrn->bitsPerPixel == 24) ||
       (pScrn->bitsPerPixel == 16)
-      ) 
+      )
      &&
-     ((ps3v->Chipset == S3_ViRGE_DXGX)  || 
-      S3_ViRGE_MX_SERIES(ps3v->Chipset) || 
+     ((ps3v->Chipset == S3_ViRGE_DXGX)  ||
+      S3_ViRGE_MX_SERIES(ps3v->Chipset) ||
       S3_ViRGE_GX2_SERIES(ps3v->Chipset)
       ))
     return TRUE;
@@ -112,12 +112,12 @@ void S3VInitVideo(ScreenPtr pScreen)
     int num_adaptors;
 
     if(
-       ((pScrn->bitsPerPixel == 24) || 
+       ((pScrn->bitsPerPixel == 24) ||
 	(pScrn->bitsPerPixel == 16)
-	) 
+	)
        &&
-       ((ps3v->Chipset == S3_ViRGE_DXGX)  || 
-	S3_ViRGE_MX_SERIES(ps3v->Chipset) || 
+       ((ps3v->Chipset == S3_ViRGE_DXGX)  ||
+	S3_ViRGE_MX_SERIES(ps3v->Chipset) ||
 	S3_ViRGE_GX2_SERIES(ps3v->Chipset) /* || */
 	/* (ps3v->Chipset == S3_ViRGE) */
 	)
@@ -128,7 +128,7 @@ void S3VInitVideo(ScreenPtr pScreen)
 	    xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Using overlay video\n");
 	    newAdaptor = S3VSetupImageVideoOverlay(pScreen);
     }
-    
+
 
     num_adaptors = xf86XVListGenericAdaptors(pScrn, &adaptors);
 
@@ -140,7 +140,7 @@ void S3VInitVideo(ScreenPtr pScreen)
 	    newAdaptors =  /* need to free this someplace */
 		malloc((num_adaptors + 1) * sizeof(XF86VideoAdaptorPtr*));
 	    if(newAdaptors) {
-		memcpy(newAdaptors, adaptors, num_adaptors * 
+		memcpy(newAdaptors, adaptors, num_adaptors *
 					sizeof(XF86VideoAdaptorPtr));
 		newAdaptors[num_adaptors] = newAdaptor;
 		adaptors = newAdaptors;
@@ -176,7 +176,7 @@ static XF86VideoEncodingRec DummyEncoding[2] =
 #define NUM_FORMATS_OVERLAY 4
 #define NUM_FORMATS_TEXTURE 4
 
-static XF86VideoFormatRec Formats[NUM_FORMATS_TEXTURE] = 
+static XF86VideoFormatRec Formats[NUM_FORMATS_TEXTURE] =
 {
   /*{15, TrueColor},*/ {16, TrueColor}, {24, TrueColor} /* ,
     {15, DirectColor}*/, {16, DirectColor}, {24, DirectColor}
@@ -207,11 +207,11 @@ static XF86ImageRec Images[NUM_IMAGES] =
 
 
 
-static int 
+static int
 S3VSetPortAttributeOverlay(
-  ScrnInfoPtr pScrn, 
+  ScrnInfoPtr pScrn,
   Atom attribute,
-  INT32 value, 
+  INT32 value,
   pointer data
 ){
 
@@ -219,11 +219,11 @@ return BadMatch;
 
 }
 
-static int 
+static int
 S3VGetPortAttributeOverlay(
-  ScrnInfoPtr pScrn, 
+  ScrnInfoPtr pScrn,
   Atom attribute,
-  INT32 *value, 
+  INT32 *value,
   pointer data
 ){
 
@@ -234,13 +234,13 @@ return BadMatch;
 
 
 
-static void 
+static void
 S3VQueryBestSize(
-  ScrnInfoPtr pScrn, 
+  ScrnInfoPtr pScrn,
   Bool motion,
-  short vid_w, short vid_h, 
-  short drw_w, short drw_h, 
-  unsigned int *p_w, unsigned int *p_h, 
+  short vid_w, short vid_h,
+  short drw_w, short drw_h,
+  unsigned int *p_w, unsigned int *p_h,
   pointer data
 ){
   *p_w = drw_w;
@@ -257,8 +257,8 @@ S3VQueryBestSize(
 
 
 
-static void 
-S3VResetVideoOverlay(ScrnInfoPtr pScrn) 
+static void
+S3VResetVideoOverlay(ScrnInfoPtr pScrn)
 {
   /* empty for ViRGE at the moment... */
 #if 0
@@ -269,17 +269,17 @@ S3VResetVideoOverlay(ScrnInfoPtr pScrn)
     MGAPortPrivPtr pPriv = pMga->portPrivate;
 
     CHECK_DMA_QUIESCENT(pMga, pScrn);
-   
+
     outMGAdac(0x51, 0x01); /* keying on */
     outMGAdac(0x52, 0xff); /* full mask */
     outMGAdac(0x53, 0xff);
     outMGAdac(0x54, 0xff);
 
-    outMGAdac(0x55, (pPriv->colorKey & pScrn->mask.red) >> 
+    outMGAdac(0x55, (pPriv->colorKey & pScrn->mask.red) >>
 		    pScrn->offset.red);
-    outMGAdac(0x56, (pPriv->colorKey & pScrn->mask.green) >> 
+    outMGAdac(0x56, (pPriv->colorKey & pScrn->mask.green) >>
 		    pScrn->offset.green);
-    outMGAdac(0x57, (pPriv->colorKey & pScrn->mask.blue) >> 
+    outMGAdac(0x57, (pPriv->colorKey & pScrn->mask.blue) >>
 		    pScrn->offset.blue);
 #endif
 
@@ -302,8 +302,8 @@ S3VAllocAdaptor(ScrnInfoPtr pScrn)
     if(!(adapt = xf86XVAllocateVideoAdaptorRec(pScrn)))
 	return NULL;
 
-    if(!(pPriv = calloc(1, sizeof(S3VPortPrivRec)  + 
-			(sizeof(DevUnion) * S3V_MAX_PORTS)))) 
+    if(!(pPriv = calloc(1, sizeof(S3VPortPrivRec)  +
+			(sizeof(DevUnion) * S3V_MAX_PORTS))))
     {
 	free(adapt);
 	return NULL;
@@ -320,10 +320,10 @@ S3VAllocAdaptor(ScrnInfoPtr pScrn)
     xvColorKey   = MAKE_ATOM("XV_COLORKEY");
 #endif
 
-    pPriv->colorKey = 
-      (1 << pScrn->offset.red) | 
+    pPriv->colorKey =
+      (1 << pScrn->offset.red) |
       (1 << pScrn->offset.green) |
-      (((pScrn->mask.blue >> pScrn->offset.blue) - 1) << pScrn->offset.blue); 
+      (((pScrn->mask.blue >> pScrn->offset.blue) - 1) << pScrn->offset.blue);
 
 #if 0
     pPriv->brightness = 0;
@@ -343,7 +343,7 @@ S3VAllocAdaptor(ScrnInfoPtr pScrn)
 
 
 
-static XF86VideoAdaptorPtr 
+static XF86VideoAdaptorPtr
 S3VSetupImageVideoOverlay(ScreenPtr pScreen)
 {
     ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
@@ -387,13 +387,13 @@ S3VSetupImageVideoOverlay(ScreenPtr pScreen)
 }
 
 
-static void 
+static void
 S3VStopVideo(ScrnInfoPtr pScrn, pointer data, Bool shutdown)
 {
   S3VPtr ps3v = S3VPTR(pScrn);
   S3VPortPrivPtr pPriv = ps3v->portPrivate;
 
-  REGION_EMPTY(pScrn->pScreen, &pPriv->clip);   
+  REGION_EMPTY(pScrn->pScreen, &pPriv->clip);
 
   if(shutdown) {
      if(pPriv->videoStatus & CLIENT_VIDEO_ON)
@@ -427,7 +427,7 @@ S3VStopVideo(ScrnInfoPtr pScrn, pointer data, Bool shutdown)
   } else {
      if(pPriv->videoStatus & CLIENT_VIDEO_ON) {
 	pPriv->videoStatus |= OFF_TIMER;
-	pPriv->offTime = currentTime.milliseconds + OFF_DELAY; 
+	pPriv->offTime = currentTime.milliseconds + OFF_DELAY;
      }
 #endif
   }
@@ -445,9 +445,9 @@ S3VAllocateMemory(
    FBAreaPtr new_area;
 
    if(area) {
-	if((area->box.y2 - area->box.y1) >= numlines) 
+	if((area->box.y2 - area->box.y1) >= numlines)
 	   return area;
-        
+
         if(xf86ResizeOffscreenArea(area, pScrn->displayWidth, numlines))
 	   return area;
 
@@ -456,7 +456,7 @@ S3VAllocateMemory(
 
    pScreen = screenInfo.screens[pScrn->scrnIndex];
 
-   new_area = xf86AllocateOffscreenArea(pScreen, pScrn->displayWidth, 
+   new_area = xf86AllocateOffscreenArea(pScreen, pScrn->displayWidth,
 				numlines, 0, NULL, NULL, NULL);
 
    if(!new_area) {
@@ -464,12 +464,12 @@ S3VAllocateMemory(
 
 	xf86QueryLargestOffscreenArea(pScreen, &max_w, &max_h, 0,
 			FAVOR_WIDTH_THEN_AREA, PRIORITY_EXTREME);
-	
+
 	if((max_w < pScrn->displayWidth) || (max_h < numlines))
 	   return NULL;
 
 	xf86PurgeUnlockedOffscreenAreas(pScreen);
-	new_area = xf86AllocateOffscreenArea(pScreen, pScrn->displayWidth, 
+	new_area = xf86AllocateOffscreenArea(pScreen, pScrn->displayWidth,
 				numlines, 0, NULL, NULL, NULL);
    }
 
@@ -484,7 +484,7 @@ S3VDisplayVideoOverlay(
     int id,
     int offset,
     short width, short height,
-    int pitch, 
+    int pitch,
     /* x,y src coordinates */
     int x1, int y1, int x2, int y2,
     /* dst in BoxPtr format */
@@ -513,14 +513,14 @@ S3VDisplayVideoOverlay(
    if(!ps3v->NeedSTREAMS)
      return;
 
-    
+
     /* Reference at http://www.webartz.com/fourcc/ */
       /* Looks like ViRGE only supports YUY2 and Y211?, */
       /* listed as YUV-16 (4.2.2) and YUV (2.1.1) in manual. */
 
-#if 0 
-      /* Only supporting modes we listed for the time being, */   
-      /* No, switching required... #if 0'd this out */  
+#if 0
+      /* Only supporting modes we listed for the time being, */
+      /* No, switching required... #if 0'd this out */
 
     switch(id) {
     case FOURCC_UYVY:
@@ -559,14 +559,14 @@ S3VDisplayVideoOverlay(
 
       /* calc horizontal scale factor */
       tmp = drw_w / src_w;
-      if (drw_w == src_w) tmp = 0; 
+      if (drw_w == src_w) tmp = 0;
       else if (tmp>=4) tmp =3;
       else if (tmp>=2) tmp =2;
       else tmp =1;
 
       /* YCbCr-16 */
-      OUTREG(SSTREAM_CONTROL_REG, 
-	     tmp << 28 | 0x01000000 | 
+      OUTREG(SSTREAM_CONTROL_REG,
+	     tmp << 28 | 0x01000000 |
 	     ((((src_w-1)<<1)-(drw_w-1)) & 0xfff)
 	     );
       break;
@@ -574,18 +574,18 @@ S3VDisplayVideoOverlay(
 #endif
 
       /* calc horizontal scale factor */
-      if (drw_w == src_w) 
-	tmp = 0; 
-      else 
+      if (drw_w == src_w)
+	tmp = 0;
+      else
 	tmp =2;
       /* YCbCr-16 */
-    OUTREG(SSTREAM_CONTROL_REG, 
+    OUTREG(SSTREAM_CONTROL_REG,
 	   tmp << 28 | 0x01000000 |
 	   ((((src_w-1)<<1)-(drw_w-1)) & 0xfff)
 	   );
 
-    OUTREG(SSTREAM_STRETCH_REG, 
-	   ((src_w - 1) & 0x7ff) | (((src_w-drw_w-1) & 0x7ff) << 16)	   
+    OUTREG(SSTREAM_STRETCH_REG,
+	   ((src_w - 1) & 0x7ff) | (((src_w-drw_w-1) & 0x7ff) << 16)
 	   );
 
     /* Color key on primary */
@@ -612,13 +612,13 @@ S3VDisplayVideoOverlay(
     OUTREG(K1_VSCALE_REG, src_h-1 );
     OUTREG(K2_VSCALE_REG, (src_h - drw_h) & 0x7ff );
 
-    if ( S3_ViRGE_GX2_SERIES(ps3v->Chipset) || 
+    if ( S3_ViRGE_GX2_SERIES(ps3v->Chipset) ||
 	 S3_ViRGE_MX_SERIES(ps3v->Chipset) )
       {
 	/* enable vert interp. & bandwidth saving - gx2 */
 	OUTREG(DDA_VERT_REG, (((~drw_h)-1) & 0xfff ) |
-	       /* bw & vert interp */ 
-	       0xc000 
+	       /* bw & vert interp */
+	       0xc000
 	       /* no bw save 0x8000*/
 	       );
       }
@@ -628,7 +628,7 @@ S3VDisplayVideoOverlay(
       }
 
     OUTREG(SSTREAM_START_REG, ((dstBox->x1 +1) << 16) | (dstBox->y1 +1));
-    OUTREG(SSTREAM_WINDOW_SIZE_REG, 
+    OUTREG(SSTREAM_WINDOW_SIZE_REG,
 	   ( ((drw_w-1) << 16) | (drw_h ) ) & 0x7ff07ff
 	   );
 
@@ -636,36 +636,36 @@ S3VDisplayVideoOverlay(
 	 S3_ViRGE_MX_SERIES(ps3v->Chipset)
 	 )
       {
-	OUTREG(COL_CHROMA_KEY_CONTROL_REG, 
+	OUTREG(COL_CHROMA_KEY_CONTROL_REG,
 	       /* color key ON - keying on primary */
-	       0x40000000  | 
+	       0x40000000  |
 	       /* # bits to compare */
 	       ((pScrn->weight.red-1) << 24) |
 
-	       ((pPriv->colorKey & pScrn->mask.red) >> pScrn->offset.red) << 
+	       ((pPriv->colorKey & pScrn->mask.red) >> pScrn->offset.red) <<
 	       (16 + 8-pScrn->weight.red) |
-	   
+
 	       ((pPriv->colorKey & pScrn->mask.green) >> pScrn->offset.green) <<
 	       (8 + 8-pScrn->weight.green) |
-	   
+
 	       ((pPriv->colorKey & pScrn->mask.blue) >> pScrn->offset.blue) <<
 	       (8-pScrn->weight.blue)
 	       );
-      } 
-    else 
+      }
+    else
       {
-	OUTREG(COL_CHROMA_KEY_CONTROL_REG, 
+	OUTREG(COL_CHROMA_KEY_CONTROL_REG,
 	       /* color key ON */
 	       0x10000000 |
 	       /* # bits to compare */
 	       ((pScrn->weight.red-1) << 24) |
 
-	       ((pPriv->colorKey & pScrn->mask.red) >> pScrn->offset.red) << 
+	       ((pPriv->colorKey & pScrn->mask.red) >> pScrn->offset.red) <<
 	       (16 + 8-pScrn->weight.red) |
-	   
+
 	       ((pPriv->colorKey & pScrn->mask.green) >> pScrn->offset.green) <<
 	       (8 + 8-pScrn->weight.green) |
-	   
+
 	       ((pPriv->colorKey & pScrn->mask.blue) >> pScrn->offset.blue) <<
 	       (8-pScrn->weight.blue)
 	       );
@@ -683,15 +683,15 @@ S3VDisplayVideoOverlay(
 }
 
 
-static int 
-S3VPutImage( 
-  ScrnInfoPtr pScrn, 
-  short src_x, short src_y, 
+static int
+S3VPutImage(
+  ScrnInfoPtr pScrn,
+  short src_x, short src_y,
   short drw_x, short drw_y,
-  short src_w, short src_h, 
+  short src_w, short src_h,
   short drw_w, short drw_h,
-  int id, unsigned char* buf, 
-  short width, short height, 
+  int id, unsigned char* buf,
+  short width, short height,
   Bool sync,
   RegionPtr clipBoxes, pointer data,
   DrawablePtr pDraw
@@ -750,7 +750,7 @@ S3VPutImage(
    default:
 	srcPitch = (width << 1);
 	break;
-   }  
+   }
 
    if(!(pPriv->area = S3VAllocateMemory(pScrn, pPriv->area, new_h)))
 	return BadAlloc;
@@ -779,7 +779,7 @@ S3VPutImage(
 	   offset3 = tmp;
 	}
 	nlines = ((((y2 + 0xffff) >> 16) + 1) & ~1) - top;
-	xf86XVCopyYUV12ToPacked(buf + (top * srcPitch) + (left >> 1), 
+	xf86XVCopyYUV12ToPacked(buf + (top * srcPitch) + (left >> 1),
 				buf + offset2, buf + offset3, dst_start,
 				srcPitch, srcPitch2, dstPitch, nlines, npixels);
 	break;
@@ -811,11 +811,11 @@ S3VPutImage(
 }
 
 
-static int 
+static int
 S3VQueryImageAttributes(
-    ScrnInfoPtr pScrn, 
-    int id, 
-    unsigned short *w, unsigned short *h, 
+    ScrnInfoPtr pScrn,
+    int id,
+    unsigned short *w, unsigned short *h,
     int *pitches, int *offsets
 ){
 

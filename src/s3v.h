@@ -111,10 +111,10 @@ void S3VGEReset(ScrnInfoPtr pScrn, int from_timeout,
 /*********************************************/
 
 
-	      
+
 /* Driver data structure; this should contain all needed info for a mode */
 /* used to be in s3v_driver.h for pre 4.0 */
-typedef struct {      
+typedef struct {
    unsigned char SR08, SR0A, SR0F;
    unsigned char SR10, SR11, SR12, SR13, SR15, SR18; /* SR9-SR1C, ext seq. */
    unsigned char SR29;
@@ -167,7 +167,7 @@ typedef struct tagS3VRec {
         /* fb support */
         DrawablePtr CurrentDrawable;
 	/* end accel stuff */
-  /* ViRGE specifics -start- */   
+  /* ViRGE specifics -start- */
   /* Xv support */
   XF86VideoAdaptorPtr adaptor;
   S3VPortPrivPtr portPrivate;
@@ -188,7 +188,7 @@ typedef struct tagS3VRec {
   Bool 		STREAMSRunning;
   /* Compatibility variables */
   int 		vgaCRIndex, vgaCRReg;
-  int 		Width, Bpp,Bpl, ScissB;   
+  int 		Width, Bpp,Bpl, ScissB;
   /* In units as noted, set in PreInit */
   int			videoRambytes;
   int			videoRamKbytes;
@@ -199,7 +199,7 @@ typedef struct tagS3VRec {
   /* are mapped with xf86MapPciMem    */
   unsigned char *	MapBase;
   unsigned char *       MapBaseDense;
-  
+
   /* Same as MapBase, except framebuffer*/
   unsigned char *	FBBase;
   /* Current visual FB starting location */
@@ -233,7 +233,7 @@ typedef struct tagS3VRec {
 
   /*************************/
   /* ViRGE options -start- */
-  /*************************/  
+  /*************************/
   OptionInfoPtr	Options;
   /* Enable PCI burst mode for reads? */
   Bool 		pci_burst;
@@ -250,7 +250,7 @@ typedef struct tagS3VRec {
   Bool 		fpm_vram;
   /* Disable Acceleration */
   Bool		NoAccel;
-  /* Adjust memory ras precharge */ 
+  /* Adjust memory ras precharge */
   /* timing */
   Bool		ShowCache;
   Bool 		early_ras_precharge;
@@ -264,9 +264,9 @@ typedef struct tagS3VRec {
   /* ViRGE options -end- */
   /***********************/
   /* ViRGE specifics -end- */
-  
+
   /* Used by ViRGE driver, but generic */
-  
+
   /* Pointer used to save wrapped */
   /* CloseScreen function.	*/
   CloseScreenProcPtr	CloseScreen;
@@ -293,16 +293,16 @@ typedef struct tagS3VRec {
     void	(*PointerMoved)(ScrnInfoPtr pScrn, int x, int y);
 
     /* Used by ViRGE driver, but generic -end- */
-  
-  
+
+
 } S3VRec, *S3VPtr;
 
 
 #define S3VPTR(p) ((S3VPtr)((p)->driverPrivate))
-      
+
 
 /* #define S3V_DEBUG */
-		 
+
 #ifdef S3V_DEBUG
 #define PVERB5(arg) ErrorF(arg)
 #define VERBLEV	1
@@ -317,7 +317,7 @@ typedef struct tagS3VRec {
 /* cep kjb */
 #define VertDebug 1
 
-/* #ifndef MetroLink */ 
+/* #ifndef MetroLink */
 #if !defined (MetroLink) && !defined (VertDebug)
 #define VerticalRetraceWait() do { \
    VGAOUT8(vgaCRIndex, 0x17); \
@@ -357,8 +357,8 @@ typedef struct tagS3VRec {
 /*********************************************************/
 
 
-/* Various defines which are used to pass flags between the Setup and 
- * Subsequent functions. 
+/* Various defines which are used to pass flags between the Setup and
+ * Subsequent functions.
  */
 
 #define NO_MONO_FILL      0x00
@@ -367,7 +367,7 @@ typedef struct tagS3VRec {
 
 /* prototypes */
 /* s3v_dac.c */
-extern void S3VCommonCalcClock(ScrnInfoPtr pScrn, DisplayModePtr mode, 
+extern void S3VCommonCalcClock(ScrnInfoPtr pScrn, DisplayModePtr mode,
 			long freq, int min_m, int min_n1, int max_n1,
 			int min_n2, int max_n2, long freq_min, long freq_max,
 			unsigned char * mdiv, unsigned char * ndiv);
