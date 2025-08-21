@@ -67,7 +67,7 @@ in this Software without prior written authorization from the XFree86 Project.
 #include "dgaproc.h"
 
 
-static Bool S3V_OpenFramebuffer(ScrnInfoPtr, char **, unsigned char **, 
+static Bool S3V_OpenFramebuffer(ScrnInfoPtr, char **, unsigned char **,
 					int *, int *, int *);
 static Bool S3V_SetMode(ScrnInfoPtr, DGAModePtr);
 static int  S3V_GetViewport(ScrnInfoPtr);
@@ -91,7 +91,7 @@ DGAFunctionRec S3V_DGAFuncs = {
 
 Bool
 S3VDGAInit(ScreenPtr pScreen)
-{   
+{
    ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
    S3VPtr ps3v = S3VPTR(pScrn);
    DGAModePtr modes = NULL, newmodes = NULL, currentMode;
@@ -101,7 +101,7 @@ S3VDGAInit(ScreenPtr pScreen)
    Bool oneMore;
 
    PVERB5("	S3VDGAInit\n");
-    
+
    pMode = firstMode = pScrn->modes;
 
    while(pMode) {
@@ -154,25 +154,25 @@ SECOND_PASS:
 	/* currentMode->address = pMga->FbStart;   MGA */
 	currentMode->address = ps3v->FBBase;
 /*cep*/
-  xf86ErrorFVerb(VERBLEV, 
+  xf86ErrorFVerb(VERBLEV,
 	"	S3VDGAInit firstone vpWid=%d, vpHgt=%d, Bpp=%d, mdbitsPP=%d\n",
 		currentMode->viewportWidth,
 		currentMode->viewportHeight,
 		Bpp,
 		currentMode->bitsPerPixel
 		 );
-		
+
 
 	if(oneMore) { /* first one is narrow width */
 	    currentMode->bytesPerScanline = ((pMode->HDisplay * Bpp) + 3) & ~3L;
 	    currentMode->imageWidth = pMode->HDisplay;
 	    /* currentMode->imageHeight =  pMga->FbUsableSize /
-					currentMode->bytesPerScanline; 
+					currentMode->bytesPerScanline;
 					MGA above */
 	    currentMode->imageHeight =  pMode->VDisplay;
 	    currentMode->pixmapWidth = currentMode->imageWidth;
 	    currentMode->pixmapHeight = currentMode->imageHeight;
-	    currentMode->maxViewportX = currentMode->imageWidth - 
+	    currentMode->maxViewportX = currentMode->imageWidth -
 					currentMode->viewportWidth;
 	    /* this might need to get clamped to some maximum */
 	    currentMode->maxViewportY = currentMode->imageHeight -
@@ -180,30 +180,30 @@ SECOND_PASS:
 	    oneMore = FALSE;
 
 /*cep*/
-  xf86ErrorFVerb(VERBLEV, 
+  xf86ErrorFVerb(VERBLEV,
 	"	S3VDGAInit imgHgt=%d, ram=%d, bytesPerScanl=%d\n",
 		currentMode->imageHeight,
 		ps3v->videoRambytes,
 		currentMode->bytesPerScanline );
-		
+
 	    goto SECOND_PASS;
 	} else {
-	    currentMode->bytesPerScanline = 
+	    currentMode->bytesPerScanline =
 			((pScrn->displayWidth * Bpp) + 3) & ~3L;
 	    currentMode->imageWidth = pScrn->displayWidth;
 	    /* currentMode->imageHeight =  pMga->FbUsableSize /
-					currentMode->bytesPerScanline; 
+					currentMode->bytesPerScanline;
 					*/
 	    currentMode->imageHeight =  ps3v->videoRambytes /
 	    			currentMode->bytesPerScanline;
 	    currentMode->pixmapWidth = currentMode->imageWidth;
 	    currentMode->pixmapHeight = currentMode->imageHeight;
-	    currentMode->maxViewportX = currentMode->imageWidth - 
+	    currentMode->maxViewportX = currentMode->imageWidth -
 					currentMode->viewportWidth;
 	    /* this might need to get clamped to some maximum */
 	    currentMode->maxViewportY = currentMode->imageHeight -
 					currentMode->viewportHeight;
-	}	    
+	}
 
 	pMode = pMode->next;
 	if(pMode == firstMode)
@@ -213,7 +213,7 @@ SECOND_PASS:
    ps3v->numDGAModes = num;
    ps3v->DGAModes = modes;
 
-   return DGAInit(pScreen, &S3V_DGAFuncs, modes, num);  
+   return DGAInit(pScreen, &S3V_DGAFuncs, modes, num);
 }
 
 
@@ -229,9 +229,9 @@ S3V_SetMode(
 
    if(!pMode) { /* restore the original mode */
 	/* put the ScreenParameters back */
-	
+
 	pScrn->displayWidth = OldDisplayWidth[index];
-	
+
         S3VSwitchMode(pScrn, pScrn->currentMode);
 	ps3v->DGAactive = FALSE;
    } else {
@@ -241,18 +241,18 @@ S3V_SetMode(
 	    ps3v->DGAactive = TRUE;
 	}
 
-	pScrn->displayWidth = pMode->bytesPerScanline / 
+	pScrn->displayWidth = pMode->bytesPerScanline /
 			      (pMode->bitsPerPixel >> 3);
 
         S3VSwitchMode(pScrn, pMode->mode);
    }
-   
+
    return TRUE;
 }
 
 
 
-static int  
+static int
 S3V_GetViewport(
   ScrnInfoPtr pScrn
 ){
@@ -261,10 +261,10 @@ S3V_GetViewport(
     return ps3v->DGAViewportStatus;
 }
 
-static void 
+static void
 S3V_SetViewport(
-   ScrnInfoPtr pScrn, 
-   int x, int y, 
+   ScrnInfoPtr pScrn,
+   int x, int y,
    int flags
 ){
    S3VPtr ps3v = S3VPTR(pScrn);
@@ -275,9 +275,9 @@ S3V_SetViewport(
 
 
 
-static Bool 
+static Bool
 S3V_OpenFramebuffer(
-   ScrnInfoPtr pScrn, 
+   ScrnInfoPtr pScrn,
    char **name,
    unsigned char **mem,
    int *size,

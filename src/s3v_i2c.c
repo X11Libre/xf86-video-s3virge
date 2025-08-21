@@ -86,11 +86,11 @@ s3v_I2CGetBits(I2CBusPtr b, int *clock, int *data)
 
     *clock = reg & 0x4;
     *data = reg & 0x8;
-    
+
     /*ErrorF("s3v_I2CGetBits: %d %d\n", *clock, *data);*/
 }
 
-Bool 
+Bool
 S3V_I2CInit(ScrnInfoPtr pScrn)
 {
     S3VPtr ps3v = S3VPTR(pScrn);

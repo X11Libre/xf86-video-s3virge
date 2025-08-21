@@ -2,12 +2,12 @@
 ChipIdentify (S3VIdentify)
 ChipProbe (S3VProbe)
 	Passive only, no ram determination, no writing
-	
+
 -- For each ScrnInfoRec, still calling order --
 ChipPreInit (S3VPreInit)
 	Allows probing and mapping, hardware must remain unchanged
   ChipGetRec
-  
+
 ChipScreenInit
   ChipMapMem
   ChipSave

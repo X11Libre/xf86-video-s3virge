@@ -38,16 +38,16 @@ in this Software without prior written authorization from the XFree86 Project.
 
 static void S3VNopAllCmdSets(ScrnInfoPtr pScrn);
 
-Bool 
+Bool
 S3VAccelInit(ScreenPtr pScreen)
 {
     return FALSE;
-} 
+}
 
-Bool 
-S3VAccelInit32(ScreenPtr pScreen) 
+Bool
+S3VAccelInit32(ScreenPtr pScreen)
 {
-   return FALSE; 
+   return FALSE;
 }
 
 static void
@@ -99,7 +99,7 @@ S3VGEReset(ScrnInfoPtr pScrn, int from_timeout, int line, const char *file)
   	int vgaCRIndex, vgaCRReg, vgaIOBase;
   	vgaIOBase = hwp->IOBase;
   	vgaCRIndex = vgaIOBase + 4;
-  	vgaCRReg = vgaIOBase + 5;  	  
+  	vgaCRReg = vgaIOBase + 5;
 
 
     if (S3_TRIO_3D_SERIES(ps3v->Chipset)) {
@@ -111,7 +111,7 @@ S3VGEReset(ScrnInfoPtr pScrn, int from_timeout, int line, const char *file)
           ErrorF("\tTrio3D -- Display is on...turning off\n");
         VGAOUT8(0x3c5,sr1 & ~0x20);
         VerticalRetraceWait();
-      }     
+      }
     }
 
     if (from_timeout) {
@@ -141,7 +141,7 @@ S3VGEReset(ScrnInfoPtr pScrn, int from_timeout, int line, const char *file)
         }
   if (!S3_TRIO_3D_SERIES(ps3v->Chipset)) {
     tmp = VGAIN8(vgaCRReg);
-    
+
     usleep(10000);
     for (r=1; r<10; r++) {  /* try multiple times to avoid lockup of ViRGE/MX */
       VGAOUT8(vgaCRReg, tmp | 0x02);
@@ -149,21 +149,21 @@ S3VGEReset(ScrnInfoPtr pScrn, int from_timeout, int line, const char *file)
       VGAOUT8(vgaCRReg, tmp & ~0x02);
       usleep(10000);
 
-      xf86ErrorFVerb(VERBLEV, "	S3VGEReset sub_stat=%lx \n", 
+      xf86ErrorFVerb(VERBLEV, "	S3VGEReset sub_stat=%lx \n",
    	(unsigned long)IN_SUBSYS_STAT()
 	);
 
-      if (!from_timeout) 
+      if (!from_timeout)
         WaitIdleEmpty();
 
       OUTREG(DEST_SRC_STR, ps3v->Bpl << 16 | ps3v->Bpl);
-      
+
       usleep(10000);
-      if (((IN_SUBSYS_STAT() & 0x3f00) != 0x3000)) 
+      if (((IN_SUBSYS_STAT() & 0x3f00) != 0x3000))
 	xf86ErrorFVerb(VERBLEV, "restarting S3 graphics engine reset %2d ...\n",r);
       else
 	break;
-    } 
+    }
     } else {
     usleep(10000);
 
@@ -236,7 +236,7 @@ S3VGEReset(ScrnInfoPtr pScrn, int from_timeout, int line, const char *file)
           break;
     }
     }
-    
+
     if (from_timeout && (ps3v->Chipset == S3_ViRGE || ps3v->Chipset == S3_ViRGE_VX
 			 || ps3v->Chipset == S3_ViRGE_DXGX)) {
       /* restore trashed registers */
@@ -284,7 +284,7 @@ S3VWaitFifoGX2(S3VPtr ps3v, int slots )
 void
 S3VWaitFifoMain(S3VPtr ps3v, int slots )
 {
-  if(ps3v->NoPCIRetry) 
+  if(ps3v->NoPCIRetry)
     while(((INREG(SUBSYS_STAT_REG) >> 8) & 0x1f) < slots){}
 }
 

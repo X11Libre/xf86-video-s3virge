@@ -78,12 +78,12 @@ in this Software without prior written authorization from the XFree86 Project.
 #define MONO_PAT_0	0xA4E8
 #define MONO_PAT_1	0xA4EC
 #define PAT_BG_CLR	0xA4F0
-#define PAT_FG_CLR	0xA4F4 
+#define PAT_FG_CLR	0xA4F4
 #define SRC_BG_CLR	0xA4F8
 #define SRC_FG_CLR	0xA4FC
-#define CMD_SET		0xA500 
+#define CMD_SET		0xA500
 #define RWIDTH_HEIGHT	0xA504
-#define RSRC_XY		0xA508 
+#define RSRC_XY		0xA508
 #define RDEST_XY	0xA50C
 
 /* Local Periperal Bus Registers */

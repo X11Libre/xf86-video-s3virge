@@ -51,7 +51,7 @@ static void S3VSetCursorColors(ScrnInfoPtr pScrn, int bg, int fg);
 
 
 /*
- * Read/write to the DAC via MMIO 
+ * Read/write to the DAC via MMIO
  */
 
 #define inCRReg(reg) (VGAHWPTR(pScrn))->readCrtc( VGAHWPTR(pScrn), reg )
@@ -66,7 +66,7 @@ static void
 S3VLoadCursorImage(ScrnInfoPtr pScrn, unsigned char *src)
 {
   S3VPtr ps3v = S3VPTR(pScrn);
- 
+
     /*PVERB5("	S3VLoadCursorImage\n");*/
 
     /* Load storage location.  */
@@ -79,7 +79,7 @@ S3VLoadCursorImage(ScrnInfoPtr pScrn, unsigned char *src)
 }
 
 
-static void 
+static void
 S3VShowCursor(ScrnInfoPtr pScrn)
 {
   char tmp;
@@ -94,7 +94,7 @@ static void
 S3VHideCursor(ScrnInfoPtr pScrn)
 {
   char tmp;
-  
+
   tmp = inCRReg(HWCURSOR_MODE_CR45);
    /* Disable cursor */
   outCRReg(HWCURSOR_MODE_CR45, tmp & ~1 );
@@ -212,7 +212,7 @@ S3VSetCursorColors(ScrnInfoPtr pScrn, int bg, int fg)
 	case 24:
 	case 32:
 	  /* Do it straight, full 24 bit color. */
-      
+
 	  /* Reset the cursor color stack pointer */
 	  inCRReg(0x45);
 	  /* Write low, mid, high bytes - foreground */
@@ -230,7 +230,7 @@ S3VSetCursorColors(ScrnInfoPtr pScrn, int bg, int fg)
 }
 
 
-Bool 
+Bool
 S3VHWCursorInit(ScreenPtr pScreen)
 {
     ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
@@ -241,7 +241,7 @@ S3VHWCursorInit(ScreenPtr pScreen)
 
     infoPtr = xf86CreateCursorInfoRec();
     if(!infoPtr) return FALSE;
-    
+
     ps3v->CursorInfoRec = infoPtr;
 
     infoPtr->MaxWidth = 64;
