@@ -18,7 +18,7 @@
 
   1.  Supported hardware
 
-  The s3virge driver for Xorg supports the S3 ViRGE, ViRGE DX, GX,
+  The s3virge driver for XLibre supports the S3 ViRGE, ViRGE DX, GX,
   GX2, MX, MX+, and VX chipsets. It also supports Trio3D and Trio3D/2x
   chips. A majority of testing is done on ViRGE DX chips, making them
   the most stable to date. This release has added support for doublescan
@@ -26,7 +26,8 @@
 
   This driver is moderately stable, however please use caution with any
   new install. Please report any issues at
-  https://gitlab.freedesktop.org/xorg/driver/xf86-video-s3virge/issues
+
+  https://github.com/X11Libre/xf86-video-s3virge/issues
 
 
   2.  Features:
