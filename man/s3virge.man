@@ -2,7 +2,7 @@
 .ds q \N'34'
 .TH S3VIRGE __drivermansuffix__ 2008-03-24 __vendorversion__
 .SH NAME
-s3virge \- S3 ViRGE video driver for Xorg
+s3virge \- S3 ViRGE video driver for XLibre
 .SH SYNOPSIS
 .B "Section \*qDevice\*q"
 .br
@@ -19,7 +19,7 @@ s3virge \- S3 ViRGE video driver for Xorg
 .B EndSection
 .SH DESCRIPTION
 .B s3virge
-is an Xorg driver for S3 based video cards.
+is an XLibre driver for S3 based video cards.
 The driver is fully accelerated,
 and provides support for the following framebuffer depths:
 8, 15, 16, and 24.
@@ -234,7 +234,7 @@ Default: off.
 Enable or disable a cr3a fix added for ViRGE MX.
 Default: on.
 .SH SEE ALSO
-.BR Xorg (1),
+.BR XLibre (1),
 .BR xorg.conf (__filemansuffix__),
 .BR Xserver (1),
 .BR X (__miscmansuffix__)
@@ -243,14 +243,6 @@ The VideoRam generic driver parameter is presently ignored by the
 s3virge driver.
 On PPC this is reported to cause problems for 2M cards,
 because they may autodetect as 4M.
-.SH SUPPORT
-For assistance with this driver, or Xorg in general, check the web
-site at https://www.x.org.
-If you find a problem with Xorg or have a
-question not answered in the FAQ please use our bug report form available on
-the web site.
-When reporting problems with the driver send as much detail as possible,
-including chipset type, a server output log, and operating system specifics.
 .SH AUTHORS
 Kevin Brosius,
 Matt Grossman,
