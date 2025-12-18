@@ -272,9 +272,6 @@ typedef struct tagS3VRec {
   CloseScreenProcPtr	CloseScreen;
   /* PCI info vars.	*/
   pciVideoPtr 	PciInfo;
-#ifndef XSERVER_LIBPCIACCESS
-  PCITAG 		PciTag;
-#endif
   /* Chip info, set using PCI	*/
   /* above.			*/
   int			Chipset;
