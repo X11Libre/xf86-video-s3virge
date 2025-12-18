@@ -34,10 +34,7 @@ in this Software without prior written authorization from the XFree86 Project.
  * s3vcommonCalcClock from S3gendac.c in pre 4.0 tree.
  *
  */
-
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include	"s3v.h"
 

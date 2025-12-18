@@ -35,10 +35,7 @@ in this Software without prior written authorization from the XFree86 Project.
  * X Video extension support -> xc/programs/hw/xfree86/common/xf86xv.c
  *
  */
-
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 /* Most xf86 commons are already in s3v.h */
 #include "s3v.h"

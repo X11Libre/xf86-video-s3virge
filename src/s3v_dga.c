@@ -54,10 +54,7 @@ in this Software without prior written authorization from the XFree86 Project.
  * ported from mga
  *
  */
-
-#ifdef HAVE_CONFIG_H
 #include "config.h"
-#endif
 
 #include "xf86.h"
 #include "xf86_OSproc.h"
