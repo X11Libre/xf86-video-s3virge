@@ -244,8 +244,6 @@ static const OptionInfoRec S3VOptions[] =
    {-1, NULL, OPTV_NONE,	{0}, FALSE}
 };
 
-#ifdef XFree86LOADER
-
 static MODULESETUPPROTO(s3virgeSetup);
 
 static XF86ModuleVersionInfo S3VVersRec =
@@ -294,9 +292,6 @@ s3virgeSetup(pointer module, pointer opts, int *errmaj, int *errmin)
 	return NULL;
     }
 }
-
-#endif /* XFree86LOADER */
-
 
 static unsigned char *find_bios_string(S3VPtr ps3v, int BIOSbase,
                                        const char *match1, const char *match2)
