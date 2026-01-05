@@ -58,16 +58,15 @@ static void S3VInitOffscreenImages(ScreenPtr);
 
 static XF86VideoAdaptorPtr S3VAllocAdaptor(ScrnInfoPtr pScrn);
 static XF86VideoAdaptorPtr S3VSetupImageVideoOverlay(ScreenPtr);
-static int  S3VSetPortAttributeOverlay(ScrnInfoPtr, Atom, INT32, pointer);
-static int  S3VGetPortAttributeOverlay(ScrnInfoPtr, Atom ,INT32 *, pointer);
+static int  S3VSetPortAttributeOverlay(ScrnInfoPtr, Atom, INT32, void*);
+static int  S3VGetPortAttributeOverlay(ScrnInfoPtr, Atom ,INT32 *, void*);
 
-
-static void S3VStopVideo(ScrnInfoPtr, pointer, Bool);
+static void S3VStopVideo(ScrnInfoPtr, void*, Bool);
 static void S3VQueryBestSize(ScrnInfoPtr, Bool, short, short, short, short,
-			unsigned int *, unsigned int *, pointer);
+			unsigned int *, unsigned int *, void*);
 static int  S3VPutImage(ScrnInfoPtr, short, short, short, short, short,
 			short, short, short, int, unsigned char*, short,
-			short, Bool, RegionPtr, pointer, DrawablePtr);
+			short, Bool, RegionPtr, void*, DrawablePtr);
 static int  S3VQueryImageAttributes(ScrnInfoPtr, int, unsigned short *,
 			unsigned short *,  int *, int *);
 
@@ -209,7 +208,7 @@ S3VSetPortAttributeOverlay(
   ScrnInfoPtr pScrn,
   Atom attribute,
   INT32 value,
-  pointer data
+  void *data
 ){
 
 return BadMatch;
@@ -221,7 +220,7 @@ S3VGetPortAttributeOverlay(
   ScrnInfoPtr pScrn,
   Atom attribute,
   INT32 *value,
-  pointer data
+  void *data
 ){
 
 
@@ -238,7 +237,7 @@ S3VQueryBestSize(
   short vid_w, short vid_h,
   short drw_w, short drw_h,
   unsigned int *p_w, unsigned int *p_h,
-  pointer data
+  void *data
 ){
   *p_w = drw_w;
   *p_h = drw_h;
@@ -385,7 +384,7 @@ S3VSetupImageVideoOverlay(ScreenPtr pScreen)
 
 
 static void
-S3VStopVideo(ScrnInfoPtr pScrn, pointer data, Bool shutdown)
+S3VStopVideo(ScrnInfoPtr pScrn, void *data, Bool shutdown)
 {
   S3VPtr ps3v = S3VPTR(pScrn);
   S3VPortPrivPtr pPriv = ps3v->portPrivate;
@@ -690,7 +689,7 @@ S3VPutImage(
   int id, unsigned char* buf,
   short width, short height,
   Bool sync,
-  RegionPtr clipBoxes, pointer data,
+  RegionPtr clipBoxes, void *data,
   DrawablePtr pDraw
 ){
    S3VPtr ps3v = S3VPTR(pScrn);
