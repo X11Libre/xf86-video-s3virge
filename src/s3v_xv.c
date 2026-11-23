@@ -721,12 +721,10 @@ S3VPutImage(
 			     clipBoxes, width, height))
 	return Success;
 
-   /*if(!pMga->TexturedVideo) {*/
-	dstBox.x1 -= pScrn->frameX0;
-	dstBox.x2 -= pScrn->frameX0;
-	dstBox.y1 -= pScrn->frameY0;
-	dstBox.y2 -= pScrn->frameY0;
-	/*}*/
+   dstBox.x1 -= pScrn->frameX0;
+   dstBox.x2 -= pScrn->frameX0;
+   dstBox.y1 -= pScrn->frameY0;
+   dstBox.y2 -= pScrn->frameY0;
 
    pitch = pScrn->bitsPerPixel * pScrn->displayWidth >> 3;
 
