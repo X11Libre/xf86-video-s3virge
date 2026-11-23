@@ -2759,7 +2759,7 @@ S3VModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode)
 	  else
 	     new->CR67 = 0x50 | 0x4;                  /* 16bpp */
           }
-       else if ((pScrn->bitsPerPixel == 24) ) {
+       else if (pScrn->bitsPerPixel == 24) {
 	 new->CR67 = 0x74;              /* 24bpp, STREAMS */
 	  					/* Flag STREAMS proc. required */
           ps3v->NeedSTREAMS = TRUE;
